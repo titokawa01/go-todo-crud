@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./main.css">
+    <title>Temple</title>
+</head>
+
+<body>
+    <h1>{{ .Message }}</h1>
+
+    <form method="POST" action="/">
+        <input type="text" name="name" placeholder="名前を入力">
+        <button type="submit">送信</button>
+    </form>
+
+    <p>入力された値: {{ .Message }}</p>
+
+    <ul>
+        {{ range .Tasks }}
+        <li>
+            {{ .ID }} : {{ .Content }}
+            <form method="POST" action="/delete" style="display:inline;">
+                <input type="hidden" name="id" value="{{ .ID }}">
+                <button type="submit">削除</button>
+            </form>
+        
+            <form method="GET" action="/edit" style="display:inline;">
+                <input type="hidden" name="id" value="{{ .ID }}">
+                <button type="submit">編集</button>
+            </form>
+        </li>
+        {{ end }}
+    </ul>
+        
+</body>
+
+</html>

@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	_ "github.com/go-sql-driver/mysql"
+	"encoding/json"
 )
 
 var db *sql.DB
@@ -16,10 +17,9 @@ type PageData struct {
 }
 
 type Task struct {
-	ID int
-	Content string
+	ID int `json:"id"`
+	Content string `json:"content"`
 }
-
 
 func main() {
 
@@ -40,6 +40,7 @@ func main() {
 	http.HandleFunc("/delete", deleteHandler)
 	http.HandleFunc("/edit", editHandler)
 	http.HandleFunc("/update", updateHandler)
+	http.HandleFunc("/api/tasks", apiTasksHandler)
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -131,4 +132,85 @@ func updateHandler(w http.ResponseWriter, r *http.Request){
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func apiTasksHandler(w http.ResponseWriter, r *http.Request){
+	fmt.Println("Method:", r.Method)
+	if r.Method == "POST" {
+		var t Task
+
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return	
+	}
+
+	result, err := db.Exec("INSERT INTO tasks (content) VALUES (?)", t.Content)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	id, _ := result.LastInsertId()
+	t.ID = int(id)
+    
+    w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(t)
+	return
+    }
+
+	if r.Method == "PUT"{
+		fmt.Println("PUTに入りました")
+		id := r.URL.Query().Get("id")
+
+		var t Task
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		_, err = db.Exec("UPDATE tasks SET content = ? WHERE id = ?", t.Content, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	if r.Method == "DELETE"{
+		id := r.URL.Query().Get("id")
+
+		_, err := db.Exec("DELETE FROM tasks WHERE id = ?", id)
+		if err != nil{
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	rows, err := db.Query("SELECT id, content FROM tasks")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var tasks []Task
+	for rows.Next(){
+		var t Task
+		if err := rows.Scan(&t.ID, &t.Content); err != nil{
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		tasks = append(tasks, t)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(tasks)
 }

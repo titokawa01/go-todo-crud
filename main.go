@@ -2,11 +2,11 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"html/template"
 	"net/http"
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
+	"log"
 )
 
 var db *sql.DB
@@ -22,32 +22,33 @@ type Task struct {
 }
 
 func main() {
-
 	var err error
 
 	db, err = sql.Open("mysql", "root:9999@unix(/tmp/mysql.sock)/mermaid")
 	if err != nil {
-		panic(err)
+		log.Fatalf("failed to connect db: %v", err)	
 	}
 
 	err = db.Ping()
 	if err != nil {
-		panic(err)
+		log.Fatalf("failed to connect db: %v", err)
 	}
 
-	fmt.Println("DB接続成功")
+	log.Println("DB connected")
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/delete", deleteHandler)
 	http.HandleFunc("/edit", editHandler)
 	http.HandleFunc("/update", updateHandler)
 	http.HandleFunc("/api/tasks", apiTasksHandler)
-	http.ListenAndServe(":8080", nil)
+	log.Println("Server started on :8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Println(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
 
@@ -58,13 +59,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		_, err := db.Exec("INSERT INTO tasks (content) VALUES (?)", name)
 		if err != nil {
-			panic(err)
+			log.Println(err)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
 		}
 	}
 
 	rows, err := db.Query ("SELECT id, content FROM tasks")
 	if err != nil {
-		panic(err)
+	log.Println(err)
+	http.Error(w, "internal server error", http.StatusInternalServerError)
+	return
 	}
     defer rows.Close()
 
@@ -74,7 +79,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	var t Task
 	err := rows.Scan(&t.ID, &t.Content)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
 	}
 		tasks = append(tasks, t)
 }	
@@ -97,7 +104,9 @@ func deleteHandler(w http.ResponseWriter, r *http.Request){
 
 	_, err := db.Exec("DELETE FROM tasks WHERE id = ?", id)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -111,7 +120,9 @@ func editHandler(w http.ResponseWriter, r * http.Request){
 	var task Task
 	err := row.Scan(&task.ID, &task.Content)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
 	}
 	tmpl, _ := template.ParseFiles("templates/edit.html")
 	tmpl.Execute(w, task)
@@ -128,26 +139,30 @@ func updateHandler(w http.ResponseWriter, r *http.Request){
 
 	_, err := db.Exec("UPDATE tasks SET content = ? WHERE id = ?", content, id)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func apiTasksHandler(w http.ResponseWriter, r *http.Request){
-	fmt.Println("Method:", r.Method)
-	if r.Method == "POST" {
+    switch r.Method {
+	case http.MethodPost:
 		var t Task
 
 		err := json.NewDecoder(r.Body).Decode(&t)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
 			return	
 	}
 
 	result, err := db.Exec("INSERT INTO tasks (content) VALUES (?)", t.Content)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Println(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
 
@@ -158,45 +173,46 @@ func apiTasksHandler(w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(t)
 	return
-    }
 
-	if r.Method == "PUT"{
-		fmt.Println("PUTに入りました")
+    case http.MethodPut:
 		id := r.URL.Query().Get("id")
 
 		var t Task
 		err := json.NewDecoder(r.Body).Decode(&t)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			log.Println(err)
+			http.Error(w, "bad request", http.StatusBadRequest)
 			return
 		}
 
 		_, err = db.Exec("UPDATE tasks SET content = ? WHERE id = ?", t.Content, id)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
 			return
 		}
 
 		w.WriteHeader(http.StatusNoContent)
 		return
-	}
 
-	if r.Method == "DELETE"{
+	case http.MethodDelete:
 		id := r.URL.Query().Get("id")
 
 		_, err := db.Exec("DELETE FROM tasks WHERE id = ?", id)
 		if err != nil{
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
 			return
 		}
 
 		w.WriteHeader(http.StatusNoContent)
 		return
-	}
-
+    
+    case http.MethodGet:
 	rows, err := db.Query("SELECT id, content FROM tasks")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Println(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
 	defer rows.Close()
@@ -205,12 +221,18 @@ func apiTasksHandler(w http.ResponseWriter, r *http.Request){
 	for rows.Next(){
 		var t Task
 		if err := rows.Scan(&t.ID, &t.Content); err != nil{
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
 			return
 		}
 		tasks = append(tasks, t)
-	}
+	}			
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(tasks)
+	return
+
+    default:
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+}
 }

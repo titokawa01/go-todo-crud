@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Go研修</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family: system-ui;
+background:#f6f7f9;
+}
+
+.layout{
+display:flex;
+height:100vh;
+}
+
+/* sidebar */
+
+.sidebar{
+width:260px;
+background:#111827;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+margin-top:0;
+}
+
+.nav-item{
+padding:10px;
+border-radius:6px;
+cursor:pointer;
+margin-bottom:6px;
+}
+
+.nav-item a{
+color:white;
+text-decoration:none;
+display:block;
+}
+
+.nav-item:hover{
+background:#1f2937;
+}
+
+/* main */
+
+.main{
+flex:1;
+overflow:auto;
+padding:40px;
+}
+
+.section{
+background:white;
+border-radius:12px;
+padding:24px;
+margin-bottom:24px;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+.notice{
+background:#fff4db;
+padding:16px;
+border-radius:8px;
+margin-top:16px;
+}
+
+.exercise{
+background:#eef6ff;
+padding:16px;
+border-radius:8px;
+margin-top:16px;
+}
+
+/* code */
+
+pre{
+background:#0f172a;
+padding:16px;
+border-radius:8px;
+overflow:auto;
+}
+
+code{
+font-family:monospace;
+font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div class="sidebar">
+
+<h2>Go研修</h2>
+
+<div class="nav-item">
+<a href="lessons/lesson1.html">Lesson1</a>
+</div>
+
+<div class="nav-item">
+<a href="lessons/lesson2.html">Lesson2</a>
+</div>
+
+<div class="nav-item">
+<a href="lessons/lesson3.html">Lesson3</a>
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="section">
+
+<h2>.env を作る（重要）</h2>
+
+<p>.env は GoアプリがDB接続に使う設定ファイルです。</p>
+
+<div class="notice">
+ここが間違うと起動できません
+</div>
+
+<pre><code class="language-bash">
+SQL_USER=app
+SQL_PASSWORD=app
+SQL_ADDR=localhost:3306
+SQL_DBNAME=excel_template_mapper
+PORT=8080
+</code></pre>
+
+</div>
+
+<div class="section">
+
+<h2>穴埋めチャレンジ（15分）</h2>
+
+<p>resolver.go を読んで空欄を埋めてください。</p>
+
+<div class="exercise">
+
+<pre><code class="language-go">
+if strings.TrimSpace(input.Name) == "" {
+return nil, errors.New("____ is required")
+}
+</code></pre>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+hljs.highlightAll();
+</script>
+
+</body>
+</html>

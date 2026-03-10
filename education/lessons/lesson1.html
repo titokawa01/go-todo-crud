@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Lesson1 環境構築</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div class="sidebar">
+
+<h2>Go研修</h2>
+
+<div class="nav-item"><a href="lesson1.html">Lesson1</a></div>
+<div class="nav-item"><a href="lesson2.html">Lesson2</a></div>
+<div class="nav-item"><a href="lesson3.html">Lesson3</a></div>
+
+</div>
+
+<div class="main">
+
+<div class="section">
+
+<h2>Go Webアプリの環境を準備する</h2>
+
+<p>
+このレッスンでは Go アプリを起動するための準備を行います。
+</p>
+
+<p>
+Goアプリは以下の構成で動きます。
+</p>
+
+<ul>
+<li>Go Web Server</li>
+<li>MySQL Database</li>
+<li>.env 設定ファイル</li>
+</ul>
+
+</div>
+
+<div class="section">
+
+<h2>.env ファイルを作成する</h2>
+
+<p>
+アプリは .env ファイルからデータベース接続情報を読み込みます。
+</p>
+
+<div class="notice">
+.env が無いとアプリは起動できません
+</div>
+
+<pre><code class="language-bash">
+SQL_USER=root
+SQL_PASSWORD=9999
+SQL_ADDR=localhost:3306
+SQL_DBNAME=mermaid
+PORT=8080
+</code></pre>
+
+</div>
+
+<div class="section">
+
+<h2>Goサーバーを起動する</h2>
+
+<p>
+以下のコマンドでGoアプリを起動します。
+</p>
+
+<pre><code class="language-bash">
+go run main.go
+</code></pre>
+
+<p>
+ブラウザで以下のURLにアクセスします。
+</p>
+
+<pre><code class="language-bash">
+http://localhost:8080
+</code></pre>
+
+</div>
+
+<div class="section">
+
+<h2>演習</h2>
+
+<p>
+main.go を確認してサーバー起動部分を探してください。
+</p>
+
+<div class="exercise">
+
+<pre><code class="language-go">
+http.ListenAndServe(":8080", nil)
+</code></pre>
+
+<p>
+このコードは何をしているでしょうか？
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+hljs.highlightAll();
+</script>
+
+</body>
+</html>

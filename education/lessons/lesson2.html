@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Lesson2 Goハンドラ</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div class="sidebar">
+
+<h2>Go研修</h2>
+
+<div class="nav-item"><a href="lesson1.html">Lesson1</a></div>
+<div class="nav-item"><a href="lesson2.html">Lesson2</a></div>
+<div class="nav-item"><a href="lesson3.html">Lesson3</a></div>
+
+</div>
+
+<div class="main">
+
+<div class="section">
+
+<h2>HTTPハンドラとは？</h2>
+
+<p>
+ブラウザがURLにアクセスすると、Goサーバーはそのリクエストを処理します。
+</p>
+
+<p>
+この処理を行う関数を <strong>HTTPハンドラ</strong> と呼びます。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>HandleFunc</h2>
+
+<p>
+Goでは URL と処理を <code>http.HandleFunc</code> で紐付けます。
+</p>
+
+<pre><code class="language-go">
+http.HandleFunc("/", handler)
+</code></pre>
+
+<p>
+このコードは次の意味になります。
+</p>
+
+<ul>
+<li>URL「/」にアクセス</li>
+<li>handler関数を実行</li>
+</ul>
+
+</div>
+
+<div class="section">
+
+<h2>Handler関数</h2>
+
+<p>
+handler関数は HTTPリクエストを処理します。
+</p>
+
+<pre><code class="language-go">
+func handler(w http.ResponseWriter, r *http.Request) {
+
+fmt.Fprintln(w, "Hello World")
+
+}
+</code></pre>
+
+<p>
+このコードはブラウザに「Hello World」を表示します。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>処理の流れ</h2>
+
+<p>
+Webアプリは以下の流れで動作します。
+</p>
+
+<pre><code class="language-text">
+Browser
+ ↓
+HTTP Request
+ ↓
+Go Server
+ ↓
+Handler
+ ↓
+Response
+</code></pre>
+
+</div>
+
+<div class="section">
+
+<h2>演習</h2>
+
+<p>
+main.go を開いて、次のコードを探してください。
+</p>
+
+<div class="exercise">
+
+<pre><code class="language-go">
+http.HandleFunc("/", handler)
+</code></pre>
+
+<p>
+このコードは何をしているでしょうか？
+</p>
+
+<ul>
+<li>URLと処理を結びつける</li>
+<li>HTTPサーバーを起動する</li>
+<li>データベース接続を行う</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+hljs.highlightAll();
+</script>
+
+</body>
+</html>

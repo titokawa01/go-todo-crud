@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Lesson3 HTMLテンプレート</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div class="sidebar">
+
+<h2>Go研修</h2>
+
+<div class="nav-item"><a href="lesson1.html">Lesson1</a></div>
+<div class="nav-item"><a href="lesson2.html">Lesson2</a></div>
+<div class="nav-item"><a href="lesson3.html">Lesson3</a></div>
+
+</div>
+
+<div class="main">
+
+<div class="section">
+
+<h2>HTMLテンプレートとは？</h2>
+
+<p>
+GoのWebアプリではHTMLテンプレートを使って画面を表示します。
+</p>
+
+<p>
+テンプレートを使うことで、サーバーのデータをHTMLに埋め込むことができます。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>テンプレートを読み込む</h2>
+
+<p>
+Goでは <code>template.ParseFiles</code> を使ってHTMLファイルを読み込みます。
+</p>
+
+<pre><code class="language-go">
+tmpl, err := template.ParseFiles("templates/index.html")
+</code></pre>
+
+<p>
+このコードは HTMLテンプレートを読み込む処理です。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>テンプレートを実行する</h2>
+
+<p>
+読み込んだテンプレートは <code>Execute</code> で表示します。
+</p>
+
+<pre><code class="language-go">
+tmpl.Execute(w, data)
+</code></pre>
+
+<p>
+ここでHTMLがブラウザに送信されます。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>処理の流れ</h2>
+
+<pre><code class="language-text">
+Browser
+ ↓
+HTTP Request
+ ↓
+Go Server
+ ↓
+DBからデータ取得
+ ↓
+HTMLテンプレートにデータを渡す
+ ↓
+Browserに表示
+</code></pre>
+
+</div>
+
+<div class="section">
+
+<h2>演習</h2>
+
+<p>
+main.go を開いて次のコードを探してください。
+</p>
+
+<div class="exercise">
+
+<pre><code class="language-go">
+tmpl.Execute(w, data)
+</code></pre>
+
+<p>
+このコードは何をしているでしょうか？
+</p>
+
+<ul>
+<li>HTMLを読み込む</li>
+<li>HTMLをブラウザに送る</li>
+<li>DB接続を行う</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+hljs.highlightAll();
+</script>
+
+</body>
+</html>

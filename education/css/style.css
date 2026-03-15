@@ -1,11 +1,118 @@
-pre {
+/* 全体 */
+
+body{
+    margin:0;
+    font-family: system-ui, -apple-system, sans-serif;
+    background:#f6f7f9;
+    color:#111;
+    }
+    
+    /* レイアウト */
+    
+    .layout{
+    display:flex;
+    min-height:100vh;
+    }
+    
+    /* sidebar */
+    
+    .sidebar{
+    width:260px;
+    background:#111827;
+    color:white;
+    padding:24px;
+    position:fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    overflow:auto;
+    }
+    
+    .sidebar h2{
+    margin-top:0;
+    font-size:20px;
+    }
+    
+    /* nav */
+    
+    .nav-item{
+    margin-bottom:8px;
+    }
+    
+    .nav-item a{
+    display:block;
+    padding:10px 12px;
+    border-radius:6px;
+    color:white;
+    text-decoration:none;
+    }
+    
+    .nav-item a:hover{
+    background:#1f2937;
+    }
+    
+    /* main */
+    
+    .main{
+    margin-left:260px;
+    padding:40px;
+    max-width:900px;
+    }
+    
+    /* section */
+    
+    .section{
+    background:white;
+    border-radius:12px;
+    padding:28px;
+    margin-bottom:24px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.05);
+    }
+    
+    .section h2{
+    margin-top:0;
+    }
+    
+    /* notice */
+    
+    .notice{
+    background:#fff4db;
+    border-left:4px solid #f59e0b;
+    padding:16px;
+    border-radius:6px;
+    margin-top:16px;
+    }
+    
+    /* exercise */
+    
+    .exercise{
+    background:#eef6ff;
+    border-left:4px solid #3b82f6;
+    padding:16px;
+    border-radius:6px;
+    margin-top:16px;
+    }
+    
+    /* code */
+    
+    pre{
     background:#0f172a;
     padding:16px;
     border-radius:8px;
     overflow:auto;
     }
     
-    code {
+    code{
     font-family:monospace;
     font-size:14px;
+    }
+    
+    /* list */
+    
+    ul{
+    padding-left:20px;
+    }
+    
+    li{
+    margin-bottom:6px;
     }

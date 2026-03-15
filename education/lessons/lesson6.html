@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Lesson6 REST API</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div class="sidebar">
+
+<h2>Go研修</h2>
+
+<div class="nav-item"><a href="lesson1.html">Lesson1</a></div>
+<div class="nav-item"><a href="lesson2.html">Lesson2</a></div>
+<div class="nav-item"><a href="lesson3.html">Lesson3</a></div>
+<div class="nav-item"><a href="lesson4.html">Lesson4</a></div>
+<div class="nav-item"><a href="lesson5.html">Lesson5</a></div>
+<div class="nav-item"><a href="lesson6.html">Lesson6</a></div>
+
+</div>
+
+<div class="main">
+
+<div class="section">
+
+<h2>REST APIとは</h2>
+
+<p>
+RESTはHTTPメソッドを使ったAPI設計です。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>HTTPメソッド</h2>
+
+<ul>
+<li>GET 取得</li>
+<li>POST 作成</li>
+<li>PUT 更新</li>
+<li>DELETE 削除</li>
+</ul>
+
+</div>
+
+<div class="section">
+
+<h2>Goでの実装</h2>
+
+<pre><code class="language-go">
+switch r.Method {
+
+case http.MethodPost:
+case http.MethodPut:
+case http.MethodDelete:
+case http.MethodGet:
+
+}
+</code></pre>
+
+</div>
+
+</div>
+
+</div>
+
+<script>hljs.highlightAll();</script>
+
+</body>
+</html>

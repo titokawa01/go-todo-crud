@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Lesson7 GitHubの使い方</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div class="section">
+
+<h2>GitHubとは？</h2>
+
+<p>
+GitHubは、コードを保存・共有・管理するためのサービスです。
+</p>
+
+<p>
+開発では、変更したコードをGitで記録し、
+GitHubに送ることで履歴を残します。
+</p>
+
+<div class="notice">
+GitHubに上げる前に、変更内容を確認する習慣がとても大切です。
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>よく使うコマンド</h2>
+
+<p>
+この研修でまず覚えるのは次の3つです。
+</p>
+
+<pre><code class="language-bash">
+git add .
+git commit -m "commit message"
+git push
+</code></pre>
+
+<ul>
+<li><code>git add .</code> : 変更をステージングする</li>
+<li><code>git commit</code> : 変更を記録する</li>
+<li><code>git push</code> : GitHubへ送る</li>
+</ul>
+
+</div>
+
+<div class="section">
+
+<h2>作業の流れ</h2>
+
+<p>
+実際の流れは次のようになります。
+</p>
+
+<pre><code class="language-text">
+コードを編集
+↓
+git status で確認
+↓
+git add .
+↓
+git commit -m "message"
+↓
+git push
+</code></pre>
+
+<p>
+この流れを繰り返すことで、作業の履歴がGitHubに残ります。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>git status で確認する</h2>
+
+<p>
+いきなり push するのではなく、
+まず <code>git status</code> で変更内容を確認します。
+</p>
+
+<pre><code class="language-bash">
+git status
+</code></pre>
+
+<p>
+ここで、想定外のファイルが混ざっていないかを見ることができます。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>演習</h2>
+
+<p>
+次のコマンドの意味を考えてみましょう。
+</p>
+
+<div class="exercise">
+
+<pre><code class="language-bash">
+git add .
+git commit -m "add lesson7"
+git push
+</code></pre>
+
+<p>
+それぞれ何をしているか説明できるでしょうか？
+</p>
+
+<ul>
+<li>変更をまとめる</li>
+<li>記録を残す</li>
+<li>GitHubへ送る</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  hljs.highlightAll();
+
+  fetch("../sidebar.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("sidebar").innerHTML = data;
+    });
+});
+</script>
+
+</body>
+</html> 

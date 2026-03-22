@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Lesson10 まとめ</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div class="section">
+
+<h2>研修のまとめ</h2>
+
+<p>
+この研修では、Goを使ったWebアプリの基本を学びました。
+</p>
+
+<pre><code class="language-text">
+Browser
+ ↓
+Go Handler
+ ↓
+Database
+ ↓
+HTML Template
+ ↓
+Browserに表示
+</code></pre>
+
+<p>
+この流れを理解することが最も重要です。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>学んだ内容</h2>
+
+<ul>
+<li>GoでWebサーバーを作る</li>
+<li>HTTPハンドラの仕組み</li>
+<li>HTMLテンプレート</li>
+<li>MySQL接続</li>
+<li>CRUD操作</li>
+<li>REST API</li>
+<li>GitとGitHub</li>
+<li>.gitignoreと事故防止</li>
+</ul>
+
+</div>
+
+<div class="section">
+
+<h2>理解チェック</h2>
+
+<div class="exercise">
+
+<p>
+次の質問に答えてみましょう。
+</p>
+
+<ul>
+<li>Handlerの役割は何ですか？</li>
+<li>template.Executeは何をしていますか？</li>
+<li>GETとPOSTの違いは？</li>
+<li>なぜ.gitignoreが必要ですか？</li>
+<li>Webアプリの処理の流れを説明できますか？</li>
+</ul>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>実務でのイメージ</h2>
+
+<p>
+実際の開発では、次のような流れで作業します。
+</p>
+
+<pre><code class="language-text">
+機能追加
+↓
+コードを書く
+↓
+動作確認
+↓
+git add / commit
+↓
+git push
+↓
+デプロイ
+</code></pre>
+
+</div>
+
+<div class="section">
+
+<h2>次のステップ</h2>
+
+<ul>
+<li>AWSにデプロイする</li>
+<li>APIを拡張する</li>
+<li>フロントエンドと連携する</li>
+</ul>
+
+<div class="notice">
+ここから先は「実務レベル」になります
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+hljs.highlightAll();
+
+fetch("../sidebar.html")
+.then(res => res.text())
+.then(data => {
+document.getElementById("sidebar").innerHTML = data;
+});
+
+});
+</script>
+
+</body>
+</html>

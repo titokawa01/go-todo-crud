@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Lesson8 .gitignore</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div class="section">
+
+<h2>.gitignoreとは？</h2>
+
+<p>
+.gitignore は「Gitに含めないファイル」を指定するファイルです。
+</p>
+
+<p>
+誤って不要なファイルや機密情報をGitHubにアップしないために使います。
+</p>
+
+<div class="notice">
+.gitignore を設定しないと事故につながります
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>よく除外するファイル</h2>
+
+<pre><code class="language-text">
+.env
+node_modules/
+.DS_Store
+</code></pre>
+
+<ul>
+<li>.env → パスワードなどの情報</li>
+<li>node_modules → サイズが大きい</li>
+<li>.DS_Store → Macの不要ファイル</li>
+</ul>
+
+</div>
+
+<div class="section">
+
+<h2>.gitignoreの書き方</h2>
+
+<p>
+プロジェクトのルートに .gitignore を作成します。
+</p>
+
+<pre><code class="language-bash">
+touch .gitignore
+</code></pre>
+
+<p>
+中身は次のように書きます。
+</p>
+
+<pre><code class="language-text">
+.env
+node_modules/
+.DS_Store
+</code></pre>
+
+</div>
+
+<div class="section">
+
+<h2>よくある事故</h2>
+
+<p>
+新人がよくやるミスです。
+</p>
+
+<ul>
+<li>.env をGitHubにアップしてしまう</li>
+<li>node_modules を丸ごとpushする</li>
+<li>不要ファイルが増えてリポジトリが重くなる</li>
+</ul>
+
+<div class="notice">
+一度pushしたファイルは完全削除が難しいです
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>git status で確認する</h2>
+
+<p>
+pushする前に必ず確認します。
+</p>
+
+<pre><code class="language-bash">
+git status
+</code></pre>
+
+<p>
+意図しないファイルが含まれていないか確認しましょう。
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>演習</h2>
+
+<div class="exercise">
+
+<p>
+次のファイルのうち、.gitignore に入れるべきものはどれでしょうか？
+</p>
+
+<ul>
+<li>.env</li>
+<li>main.go</li>
+<li>node_modules</li>
+<li>README.md</li>
+</ul>
+
+<p>
+理由も考えてみましょう。
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+hljs.highlightAll();
+
+fetch("../sidebar.html")
+.then(res => res.text())
+.then(data => {
+document.getElementById("sidebar").innerHTML = data;
+});
+
+});
+</script>
+
+</body>
+</html>

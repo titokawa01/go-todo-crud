@@ -104,49 +104,7 @@ color:#e5e7eb;
 
 <h2>Go研修</h2>
 
-<div class="nav-item">
-<a href="lesson1.html">Lesson1</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson2.html">Lesson2</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson3.html">Lesson3</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson4.html">Lesson4</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson5.html">Lesson5</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson6.html">Lesson6</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson7.html">Lesson7</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson8.html">Lesson8</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson9.html">Lesson9</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson10.html">Lesson10</a>
-</div>
-
-<div class="nav-item">
-<a href="lesson11.html">Lesson11</a>
-</div>
+<div id="sidebar"></div>
 
 </div>
 
@@ -261,8 +219,14 @@ http.ListenAndServe(":8080", nil)
 </div>
 
 <script>
-hljs.highlightAll();
-</script>
+    hljs.highlightAll();
+    
+    fetch("../sidebar.html")
+    .then(res => res.text())
+    .then(data => {
+    document.getElementById("sidebar").innerHTML = data
+    })
+    </script>
 
 </body>
 </html>

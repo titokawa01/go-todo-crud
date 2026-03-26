@@ -23,36 +23,102 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
+<h2>データベースとは？</h2>
 
+<p>
+Webアプリでは、データを保存するためにデータベースを使用します。
+</p>
+
+<p>
+例えばToDoアプリでは、以下のようなデータを保存します。
+</p>
+
+<ul>
+<li>タスク内容</li>
+<li>作成日時</li>
+<li>完了状態</li>
+</ul>
+
+<div class="notice">
+アプリは「データを保存できる」ことで初めて実用的になります
+</div>
+</div>
+
+<div class="section">
 <h2>MySQLに接続する</h2>
 
 <p>
-Goアプリは database/sql パッケージを使ってデータベースに接続します。
+Goでは <code>database/sql</code> パッケージを使ってDBに接続します。
 </p>
 
 <pre><code class="language-go">
-db, err = sql.Open("mysql",
-"root:9999@unix(/tmp/mysql.sock)/mermaid")
-</code></pre>
-
-</div>
-
-<div class="section">
-
-<h2>DB接続確認</h2>
-
-<pre><code class="language-go">
-err = db.Ping()
+db, err := sql.Open("mysql",
+"root:9999@tcp(localhost:3306)/mermaid")
 </code></pre>
 
 <p>
-Pingはデータベースに接続できるか確認する処理です。
+この文字列は「接続情報」を表しています。
 </p>
-
 </div>
 
 <div class="section">
+<h2>接続文字列の意味</h2>
 
+<pre><code class="language-text">
+ユーザー名:パスワード@tcp(ホスト:ポート)/データベース名
+</code></pre>
+
+<ul>
+<li>root → ユーザー名</li>
+<li>9999 → パスワード</li>
+<li>localhost → DBサーバーの場所</li>
+<li>3306 → ポート番号</li>
+<li>mermaid → データベース名</li>
+</ul>
+
+<div class="notice">
+接続情報は.envファイルで管理するのが一般的です
+</div>
+</div>
+
+<div class="section">
+<h2>DB接続確認（Ping）</h2>
+
+<p>
+接続できたかどうかは <code>Ping()</code> で確認します。
+</p>
+
+<pre><code class="language-go">
+err = db.Ping()
+if err != nil {
+    log.Fatal(err)
+}
+</code></pre>
+
+<p>
+エラーが出る場合は、接続情報やMySQLの起動状態を確認します。
+</p>
+</div>
+
+<div class="section">
+<h2>処理の流れ</h2>
+
+<pre><code class="language-text">
+Goアプリ起動
+ ↓
+DB接続（sql.Open）
+ ↓
+接続確認（Ping）
+ ↓
+クエリ実行（次のLesson）
+</code></pre>
+
+<p>
+DB接続はアプリの「土台」となる処理です。
+</p>
+</div>
+
+<div class="section">
 <h2>演習</h2>
 
 <div class="exercise">
@@ -62,10 +128,39 @@ db, err := sql.Open("mysql", "????")
 </code></pre>
 
 <p>
-接続文字列はどの情報で構成されているでしょうか？</p>
+接続文字列はどの情報で構成されていますか？
+</p>
+
+<ul>
+<li>ユーザー名</li>
+<li>パスワード</li>
+<li>ホスト</li>
+<li>ポート</li>
+<li>データベース名</li>
+</ul>
 
 </div>
 
+<div class="exercise">
+
+<p>
+なぜ接続確認（Ping）が必要なのでしょうか？
+</p>
+
+</div>
+
+</div>
+
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson4ではデータベースへの接続を学びました。
+</p>
+
+<p>
+次のLesson5では、実際にデータを保存（Create）していきます。
+</p>
 </div>
 
 </div>
@@ -74,15 +169,15 @@ db, err := sql.Open("mysql", "????")
 
 <script>
 
-    hljs.highlightAll();
-    
-    fetch("../sidebar.html")
-    .then(res => res.text())
-    .then(data => {
-    document.getElementById("sidebar").innerHTML = data
-    })
-    
-    </script>
+hljs.highlightAll();
+
+fetch("../sidebar.html")
+.then(res => res.text())
+.then(data => {
+document.getElementById("sidebar").innerHTML = data
+})
+
+</script>
 
 </body>
 </html>

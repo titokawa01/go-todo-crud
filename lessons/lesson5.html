@@ -23,8 +23,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-
 <h2>CRUDとは</h2>
+
+<p>
+CRUDは、データベースの基本操作を表す言葉です。
+</p>
 
 <ul>
 <li>Create（作成）</li>
@@ -33,54 +36,141 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <li>Delete（削除）</li>
 </ul>
 
+<div class="notice">
+この4つを理解すると、Webアプリの基本的なデータ操作が分かるようになります。
+</div>
 </div>
 
 <div class="section">
+<h2>Create（作成）</h2>
 
-<h2>Create</h2>
+<p>
+Createは、データベースに新しいデータを追加する処理です。
+</p>
 
 <pre><code class="language-go">
 db.Exec("INSERT INTO tasks (content) VALUES (?)", name)
 </code></pre>
 
+<p>
+このSQLは、tasksテーブルに新しい行を追加します。
+</p>
+
+<ul>
+<li><code>INSERT INTO</code> → データを追加する</li>
+<li><code>tasks</code> → 保存先のテーブル名</li>
+<li><code>content</code> → 保存する項目</li>
+<li><code>?</code> → 値を安全に差し込むためのプレースホルダ</li>
+</ul>
+
+<div class="notice">
+直接文字列をつなげるのではなく、プレースホルダを使うのが基本です。
+</div>
 </div>
 
 <div class="section">
+<h2>Read（取得）</h2>
 
-<h2>Read</h2>
+<p>
+Readは、データベースから保存済みのデータを取り出す処理です。
+</p>
 
 <pre><code class="language-go">
 rows, err := db.Query("SELECT id, content FROM tasks")
 </code></pre>
 
+<p>
+このSQLは、tasksテーブルから <code>id</code> と <code>content</code> を取得します。
+</p>
+
+<ul>
+<li><code>SELECT</code> → データを取得する</li>
+<li><code>rows</code> → 複数行の結果を受け取る</li>
+</ul>
 </div>
 
 <div class="section">
+<h2>CreateとReadの違い</h2>
 
+<div class="exercise">
+<p>
+Createは「データを増やす」、Readは「データを見る」処理です。
+</p>
+
+<pre><code class="language-text">
+Create → INSERT
+Read    → SELECT
+</code></pre>
+</div>
+</div>
+
+<div class="section">
+<h2>処理の流れ</h2>
+
+<pre><code class="language-text">
+ブラウザでフォーム送信
+ ↓
+Goサーバーで受け取る
+ ↓
+CREATEならINSERT
+ ↓
+READならSELECT
+ ↓
+DBの結果を画面に返す
+</code></pre>
+
+<p>
+この流れが分かると、CRUDアプリ全体の動きが見えてきます。
+</p>
+</div>
+
+<div class="section">
 <h2>演習</h2>
 
 <div class="exercise">
-
 <p>UpdateとDeleteのSQLを書いてみましょう。</p>
 
+<pre><code class="language-go">
+UPDATE tasks SET content = ? WHERE id = ?
+DELETE FROM tasks WHERE id = ?
+</code></pre>
+</div>
+
+<div class="exercise">
+<p>次のコードが何をしているか説明してみましょう。</p>
+
+<pre><code class="language-go">
+db.Exec("INSERT INTO tasks (content) VALUES (?)", name)
+rows, err := db.Query("SELECT id, content FROM tasks")
+</code></pre>
+</div>
+</div>
+
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson5では、CRUDの基本操作を確認しました。
+</p>
+
+<p>
+次のLesson6では、CreateとReadを実際の画面やハンドラとつなげていきます。
+</p>
 </div>
 
 </div>
-
-</div>
-
 </div>
 
 <script>
 
-    hljs.highlightAll();
-    
-    fetch("../sidebar.html")
-    .then(res => res.text())
-    .then(data => {
-    document.getElementById("sidebar").innerHTML = data
-    })
-    
+hljs.highlightAll();
+
+fetch("../sidebar.html")
+.then(res => res.text())
+.then(data => {
+document.getElementById("sidebar").innerHTML = data
+})
+
 </script>
 
 </body>

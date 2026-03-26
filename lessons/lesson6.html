@@ -23,47 +23,152 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-
 <h2>REST APIとは</h2>
 
 <p>
-RESTはHTTPメソッドを使ったAPI設計です。
+REST APIは、HTTPの仕組みを使ってデータをやり取りする設計の考え方です。
 </p>
 
+<p>
+ブラウザやフロントエンドから、サーバーに対して「取得・作成・更新・削除」を行います。
+</p>
+
+<div class="notice">
+このLessonでは、HTTPメソッドごとに処理を分ける考え方を学びます。
+</div>
 </div>
 
 <div class="section">
-
 <h2>HTTPメソッド</h2>
 
+<p>
+RESTでは、HTTPメソッドを使って操作の種類を表します。
+</p>
+
 <ul>
-<li>GET 取得</li>
-<li>POST 作成</li>
-<li>PUT 更新</li>
-<li>DELETE 削除</li>
+<li>GET：取得</li>
+<li>POST：作成</li>
+<li>PUT：更新</li>
+<li>DELETE：削除</li>
 </ul>
 
+<pre><code class="language-text">
+GET    → 読む
+POST   → 追加する
+PUT    → 変更する
+DELETE → 消す
+</code></pre>
 </div>
 
 <div class="section">
+<h2>Goでの分岐</h2>
 
-<h2>Goでの実装</h2>
+<p>
+Goでは、リクエストのメソッドを見て処理を分けます。
+</p>
 
 <pre><code class="language-go">
 switch r.Method {
+case http.MethodGet:
+	// 一覧取得
+case http.MethodPost:
+	// 新規作成
+case http.MethodPut:
+	// 更新
+case http.MethodDelete:
+	// 削除
+default:
+	// 対応していないメソッド
+}
+</code></pre>
 
+<p>
+この分岐によって、1つのURLでも複数の操作を扱えるようになります。
+</p>
+</div>
+
+<div class="section">
+<h2>なぜ分けるのか</h2>
+
+<p>
+同じURLでも、操作の種類によって処理は変わります。
+</p>
+
+<ul>
+<li>GETなら一覧を返す</li>
+<li>POSTなら新しいデータを保存する</li>
+<li>PUTなら既存データを更新する</li>
+<li>DELETEならデータを削除する</li>
+</ul>
+
+<div class="notice">
+URLとHTTPメソッドを組み合わせることで、APIの役割が分かりやすくなります。
+</div>
+</div>
+
+<div class="section">
+<h2>処理の流れ</h2>
+
+<pre><code class="language-text">
+ブラウザ / フロントエンド
+ ↓
+HTTPリクエスト送信
+ ↓
+Goサーバー
+ ↓
+r.Method で分岐
+ ↓
+GET / POST / PUT / DELETE に応じた処理
+ ↓
+レスポンスを返す
+</code></pre>
+
+<p>
+この流れが分かると、CRUDアプリの画面とサーバー処理をつなげやすくなります。
+</p>
+</div>
+
+<div class="section">
+<h2>演習</h2>
+
+<div class="exercise">
+<p>次のHTTPメソッドが何を表すか答えてみましょう。</p>
+
+<ul>
+<li>GET</li>
+<li>POST</li>
+<li>PUT</li>
+<li>DELETE</li>
+</ul>
+</div>
+
+<div class="exercise">
+<p>次のコードは何をしているでしょうか？</p>
+
+<pre><code class="language-go">
+switch r.Method {
 case http.MethodPost:
 case http.MethodPut:
 case http.MethodDelete:
 case http.MethodGet:
-
 }
 </code></pre>
+</div>
+</div>
 
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson6では、HTTPメソッドごとに処理を分ける考え方を学びました。
+</p>
+
+<p>
+次のLesson7では、これを実際の画面や画面遷移と結びつけていきます。
+</p>
 </div>
 
 </div>
-
 </div>
 
 <script>

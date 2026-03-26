@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson8 .gitignore</title>
+<title>Lesson8 GitHubと.gitignore</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,7 +23,66 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
+<h2>GitHubとは？</h2>
 
+<p>
+GitHubは、コードを保存・共有・管理するためのサービスです。
+</p>
+
+<p>
+この研修では、ローカルで作業した内容をGitで記録し、GitHubへ送る流れを使います。
+</p>
+
+<div class="notice">
+GitHubに上げることで、変更履歴を残しながら開発を進められます。
+</div>
+</div>
+
+<div class="section">
+<h2>よく使うコマンド</h2>
+
+<p>
+まずは次の3つを覚えます。
+</p>
+
+<pre><code class="language-bash">
+git add .
+git commit -m "commit message"
+git push
+</code></pre>
+
+<ul>
+<li><code>git add .</code> : 変更をまとめる準備をする</li>
+<li><code>git commit</code> : 変更を記録する</li>
+<li><code>git push</code> : GitHubへ送る</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>作業の流れ</h2>
+
+<p>
+実際の開発では、次の順番で作業します。
+</p>
+
+<pre><code class="language-text">
+コードを編集
+↓
+git status で確認
+↓
+git add .
+↓
+git commit -m "message"
+↓
+git push
+</code></pre>
+
+<p>
+pushする前に内容を確認する習慣をつけると、事故を防ぎやすくなります。
+</p>
+</div>
+
+<div class="section">
 <h2>.gitignoreとは？</h2>
 
 <p>
@@ -31,17 +90,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 </p>
 
 <p>
-誤って不要なファイルや機密情報をGitHubにアップしないために使います。
+不要なファイルや機密情報を誤ってGitHubに上げないために使います。
 </p>
 
 <div class="notice">
-.gitignore を設定しないと事故につながります
+.gitignore を設定しておくと、公開してはいけない情報を守りやすくなります。
 </div>
-
 </div>
 
 <div class="section">
-
 <h2>よく除外するファイル</h2>
 
 <pre><code class="language-text">
@@ -51,19 +108,17 @@ node_modules/
 </code></pre>
 
 <ul>
-<li>.env → パスワードなどの情報</li>
-<li>node_modules → サイズが大きい</li>
-<li>.DS_Store → Macの不要ファイル</li>
+<li><code>.env</code> → パスワードなどの情報</li>
+<li><code>node_modules/</code> → サイズが大きい</li>
+<li><code>.DS_Store</code> → Macの不要ファイル</li>
 </ul>
-
 </div>
 
 <div class="section">
-
 <h2>.gitignoreの書き方</h2>
 
 <p>
-プロジェクトのルートに .gitignore を作成します。
+プロジェクトのルートに <code>.gitignore</code> を作成します。
 </p>
 
 <pre><code class="language-bash">
@@ -79,15 +134,13 @@ touch .gitignore
 node_modules/
 .DS_Store
 </code></pre>
-
 </div>
 
 <div class="section">
-
 <h2>よくある事故</h2>
 
 <p>
-新人がよくやるミスです。
+最初によく起きるミスを確認しておきます。
 </p>
 
 <ul>
@@ -97,35 +150,14 @@ node_modules/
 </ul>
 
 <div class="notice">
-一度pushしたファイルは完全削除が難しいです
+一度pushしたファイルは、あとから完全に消すのが大変なことがあります。
 </div>
-
-</div>
-
-<div class="section">
-
-<h2>git status で確認する</h2>
-
-<p>
-pushする前に必ず確認します。
-</p>
-
-<pre><code class="language-bash">
-git status
-</code></pre>
-
-<p>
-意図しないファイルが含まれていないか確認しましょう。
-</p>
-
 </div>
 
 <div class="section">
-
 <h2>演習</h2>
 
 <div class="exercise">
-
 <p>
 次のファイルのうち、.gitignore に入れるべきものはどれでしょうか？
 </p>
@@ -140,9 +172,29 @@ git status
 <p>
 理由も考えてみましょう。
 </p>
-
 </div>
 
+<div class="exercise">
+<p>
+次のコマンドは何をしているでしょうか？
+</p>
+
+<pre><code class="language-bash">
+git status
+</code></pre>
+</div>
+</div>
+
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson8では、GitHubへの登録方法と、Gitに含めないファイルの管理を学びました。
+</p>
+
+<p>
+次のLesson9では、画面から送信されたデータを受け取る方法を学びます。
+</p>
 </div>
 
 </div>
@@ -151,7 +203,6 @@ git status
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
 hljs.highlightAll();
 
 fetch("../sidebar.html")
@@ -159,7 +210,6 @@ fetch("../sidebar.html")
 .then(data => {
 document.getElementById("sidebar").innerHTML = data;
 });
-
 });
 </script>
 

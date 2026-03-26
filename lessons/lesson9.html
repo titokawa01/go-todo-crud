@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson9 処理の流れ</title>
+<title>Lesson9 Createの実装</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,105 +23,159 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-
-<h2>Webアプリの全体の流れ</h2>
+<h2>Createとは？</h2>
 
 <p>
-ここまでのレッスンをつなげると、Webアプリは次のように動きます。
+Createは、フォームから送られたデータをデータベースに保存する処理です。
 </p>
 
-<pre><code class="language-text">
-Browser
- ↓
-HTTP Request
- ↓
-Go Handler
- ↓
-Database
- ↓
-HTML Template
- ↓
-Browserに表示
-</code></pre>
+<p>
+このLessonでは、画面から受け取った値をDBへ登録する流れを学びます。
+</p>
 
+<div class="notice">
+ここで「受け取る」と「保存する」がつながります。
+</div>
 </div>
 
 <div class="section">
+<h2>処理の流れ</h2>
 
-<h2>リクエストの流れ（コード）</h2>
+<pre><code class="language-text">
+ブラウザのフォーム
+↓
+Goのhandlerで受け取る
+↓
+入力値を取り出す
+↓
+INSERTでDBに保存する
+↓
+一覧画面へ戻る
+</code></pre>
+
+<p>
+Createは、CRUDアプリの最初の完成ポイントです。
+</p>
+</div>
+
+<div class="section">
+<h2>フォームの値を受け取る</h2>
+
+<p>
+Lesson7で学んだように、フォームから送られた値は <code>FormValue</code> で取り出せます。
+</p>
 
 <pre><code class="language-go">
-http.HandleFunc("/", handler)
-
 func handler(w http.ResponseWriter, r *http.Request) {
-
-rows, _ := db.Query("SELECT id, content FROM tasks")
-
-tmpl, _ := template.ParseFiles("templates/index.html")
-
-tmpl.Execute(w, data)
-
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		content := r.FormValue("content")
+		_ = content
+	}
 }
 </code></pre>
 
 <p>
-この1つの関数の中で、すべての処理がつながっています。
+ここで取り出した値を、そのままDB保存に使います。
 </p>
-
 </div>
 
 <div class="section">
-
-<h2>それぞれの役割</h2>
-
-<ul>
-<li>Browser → ユーザーの操作</li>
-<li>Handler → リクエスト処理</li>
-<li>Database → データ保存</li>
-<li>Template → 画面表示</li>
-</ul>
-
-</div>
-
-<div class="section">
-
-<h2>重要なポイント</h2>
-
-<div class="notice">
-
-Webアプリは「流れ」で理解することが大切です
-
-</div>
+<h2>INSERTで保存する</h2>
 
 <p>
-単体のコードではなく、処理のつながりを意識しましょう。
+データを保存するときは、SQLの <code>INSERT</code> を使います。
 </p>
 
+<pre><code class="language-go">
+_, err := db.Exec(
+	"INSERT INTO tasks (content) VALUES (?)",
+	content,
+)
+</code></pre>
+
+<p>
+このコードは、tasksテーブルに新しいデータを追加します。
+</p>
+
+<ul>
+<li><code>db.Exec</code> → SQLを実行する</li>
+<li><code>INSERT INTO</code> → データを追加する</li>
+<li><code>?</code> → 安全に値を渡すためのプレースホルダ</li>
+</ul>
+
+<div class="notice">
+文字列を直接つなぐのではなく、プレースホルダを使うのが基本です。
+</div>
 </div>
 
 <div class="section">
+<h2>保存後の流れ</h2>
 
+<p>
+保存できたら、一覧画面へ戻すと使いやすくなります。
+</p>
+
+<pre><code class="language-go">
+http.Redirect(w, r, "/", http.StatusSeeOther)
+</code></pre>
+
+<p>
+これは、保存後にトップページへ移動する処理です。
+</p>
+</div>
+
+<div class="section">
+<h2>よくある確認ポイント</h2>
+
+<ul>
+<li>フォームの <code>name</code> と <code>FormValue</code> が一致しているか</li>
+<li>SQL文のテーブル名とカラム名が正しいか</li>
+<li>DB接続が成功しているか</li>
+<li>保存後の遷移先が正しいか</li>
+</ul>
+</div>
+
+<div class="section">
 <h2>演習</h2>
 
 <div class="exercise">
-
 <p>
-次の処理はどの順番で実行されるでしょうか？
+次のコードは何をしているでしょうか？
 </p>
 
-<ul>
-<li>DBからデータ取得</li>
-<li>ブラウザがアクセス</li>
-<li>HTMLを生成</li>
-<li>Handlerが処理</li>
-</ul>
-
-<p>
-正しい順番に並べてみましょう。
-</p>
-
+<pre><code class="language-go">
+content := r.FormValue("content")
+</code></pre>
 </div>
 
+<div class="exercise">
+<p>
+次のSQLは何をしているでしょうか？
+</p>
+
+<pre><code class="language-go">
+INSERT INTO tasks (content) VALUES (?)
+</code></pre>
+</div>
+
+<div class="exercise">
+<p>
+保存後に <code>redirect</code> するのはなぜでしょうか？
+</p>
+</div>
+</div>
+
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson9では、画面から受け取ったデータをDBへ保存する流れを学びました。
+</p>
+
+<p>
+次のLesson10では、保存したデータを一覧で表示するRead処理を学びます。
+</p>
 </div>
 
 </div>
@@ -130,7 +184,6 @@ Webアプリは「流れ」で理解することが大切です
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
 hljs.highlightAll();
 
 fetch("../sidebar.html")
@@ -138,7 +191,6 @@ fetch("../sidebar.html")
 .then(data => {
 document.getElementById("sidebar").innerHTML = data;
 });
-
 });
 </script>
 

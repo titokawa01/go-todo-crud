@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson10 まとめ</title>
+<title>Lesson10 Readの実装</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,108 +23,153 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-
-<h2>研修のまとめ</h2>
-
-<p>
-この研修では、Goを使ったWebアプリの基本を学びました。
-</p>
-
-<pre><code class="language-text">
-Browser
- ↓
-Go Handler
- ↓
-Database
- ↓
-HTML Template
- ↓
-Browserに表示
-</code></pre>
+<h2>Readとは？</h2>
 
 <p>
-この流れを理解することが最も重要です。
+Readは、データベースに保存された情報を取り出して表示する処理です。
 </p>
-
-</div>
-
-<div class="section">
-
-<h2>学んだ内容</h2>
-
-<ul>
-<li>GoでWebサーバーを作る</li>
-<li>HTTPハンドラの仕組み</li>
-<li>HTMLテンプレート</li>
-<li>MySQL接続</li>
-<li>CRUD操作</li>
-<li>REST API</li>
-<li>GitとGitHub</li>
-<li>.gitignoreと事故防止</li>
-</ul>
-
-</div>
-
-<div class="section">
-
-<h2>理解チェック</h2>
-
-<div class="exercise">
 
 <p>
-次の質問に答えてみましょう。
+CRUDの中でも、まず一番見える形で動かしやすいのがReadです。
 </p>
-
-<ul>
-<li>Handlerの役割は何ですか？</li>
-<li>template.Executeは何をしていますか？</li>
-<li>GETとPOSTの違いは？</li>
-<li>なぜ.gitignoreが必要ですか？</li>
-<li>Webアプリの処理の流れを説明できますか？</li>
-</ul>
-
-</div>
-
-</div>
-
-<div class="section">
-
-<h2>実務でのイメージ</h2>
-
-<p>
-実際の開発では、次のような流れで作業します。
-</p>
-
-<pre><code class="language-text">
-機能追加
-↓
-コードを書く
-↓
-動作確認
-↓
-git add / commit
-↓
-git push
-↓
-デプロイ
-</code></pre>
-
-</div>
-
-<div class="section">
-
-<h2>次のステップ</h2>
-
-<ul>
-<li>AWSにデプロイする</li>
-<li>APIを拡張する</li>
-<li>フロントエンドと連携する</li>
-</ul>
 
 <div class="notice">
-ここから先は「実務レベル」になります
+保存したデータを一覧で確認できると、アプリらしさが一気に出ます。
+</div>
 </div>
 
+<div class="section">
+<h2>SELECTで取得する</h2>
+
+<p>
+DBからデータを取り出すときは <code>SELECT</code> を使います。
+</p>
+
+<pre><code class="language-go">
+rows, err := db.Query("SELECT id, content FROM tasks")
+</code></pre>
+
+<p>
+このSQLは、tasksテーブルの <code>id</code> と <code>content</code> を取得します。
+</p>
+
+<ul>
+<li><code>db.Query</code> → 複数行のデータを取得する</li>
+<li><code>rows</code> → 取得結果を順番に読むためのもの</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>取得したデータを読む</h2>
+
+<p>
+取得した <code>rows</code> は、そのままでは画面に出せません。
+</p>
+
+<p>
+1行ずつ読み取って、表示用のデータに整えます。
+</p>
+
+<pre><code class="language-go">
+for rows.Next() {
+	var id int
+	var content string
+	rows.Scan(&id, &content)
+}
+</code></pre>
+
+<p>
+この流れで、データベースの中身をGoの変数に取り出せます。
+</p>
+</div>
+
+<div class="section">
+<h2>画面に渡す</h2>
+
+<p>
+取り出したデータは、テンプレートに渡して一覧画面として表示します。
+</p>
+
+<pre><code class="language-go">
+data := struct {
+	Tasks []Task
+}{
+	Tasks: tasks,
+}
+</code></pre>
+
+<p>
+テンプレート側では、配列として受け取り、繰り返し表示できます。
+</p>
+</div>
+
+<div class="section">
+<h2>一覧表示のイメージ</h2>
+
+<pre><code class="language-text">
+tasksテーブル
+↓
+SELECTで取得
+↓
+Goで整形
+↓
+template.Executeで表示
+↓
+ブラウザで一覧を見る
+</code></pre>
+
+<p>
+Readが完成すると、Createで保存したデータを確認できるようになります。
+</p>
+</div>
+
+<div class="section">
+<h2>よくある確認ポイント</h2>
+
+<ul>
+<li>SQLのカラム名は正しいか</li>
+<li><code>rows.Next()</code> を使っているか</li>
+<li><code>rows.Scan()</code> の順番は合っているか</li>
+<li>テンプレートへデータを渡せているか</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>演習</h2>
+
+<div class="exercise">
+<p>
+次のコードは何をしているでしょうか？
+</p>
+
+<pre><code class="language-go">
+rows, err := db.Query("SELECT id, content FROM tasks")
+</code></pre>
+</div>
+
+<div class="exercise">
+<p>
+なぜ <code>rows.Next()</code> が必要なのでしょうか？
+</p>
+</div>
+
+<div class="exercise">
+<p>
+取得したデータをブラウザに見せるには、どの処理につなげる必要があるでしょうか？
+</p>
+</div>
+</div>
+
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson10では、データベースからデータを取り出して一覧表示する流れを学びました。
+</p>
+
+<p>
+次のLesson11では、研修の総まとめとしてCRUDアプリ全体を振り返ります。
+</p>
 </div>
 
 </div>
@@ -133,7 +178,6 @@ git push
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
 hljs.highlightAll();
 
 fetch("../sidebar.html")
@@ -141,7 +185,6 @@ fetch("../sidebar.html")
 .then(data => {
 document.getElementById("sidebar").innerHTML = data;
 });
-
 });
 </script>
 

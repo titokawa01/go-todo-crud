@@ -23,25 +23,26 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-
 <h2>HTTPハンドラとは？</h2>
 
 <p>
-ブラウザがURLにアクセスすると、Goサーバーはそのリクエストを処理します。
+Webアプリでは、ブラウザがURLにアクセスすると、Goサーバーがそのリクエストを受け取ります。
 </p>
 
 <p>
-この処理を行う関数を <strong>HTTPハンドラ</strong> と呼びます。
+そのリクエストに対して、どの処理を実行するかを決めるのが <strong>HTTPハンドラ</strong> です。
 </p>
 
+<p>
+つまり、ハンドラは「URLごとの受付担当」のような役割を持ちます。
+</p>
 </div>
 
 <div class="section">
-
-<h2>HandleFunc</h2>
+<h2>URLと処理を結びつける</h2>
 
 <p>
-Goでは URL と処理を <code>http.HandleFunc</code> で紐付けます。
+Goでは、URLと処理を <code>http.HandleFunc</code> で結びつけます。
 </p>
 
 <pre><code class="language-go">
@@ -53,36 +54,43 @@ http.HandleFunc("/", handler)
 </p>
 
 <ul>
-<li>URL「/」にアクセス</li>
-<li>handler関数を実行</li>
+<li><code>/</code> にアクセスされたら</li>
+<li><code>handler</code> 関数を実行する</li>
 </ul>
 
+<div class="notice">
+<code>http.HandleFunc</code> は「どのURLに、どの処理を呼ぶか」を登録する仕組みです。
+</div>
 </div>
 
 <div class="section">
-
-<h2>Handler関数</h2>
+<h2>Handler関数の書き方</h2>
 
 <p>
-handler関数は HTTPリクエストを処理します。
+handler関数は、HTTPリクエストを受け取ってレスポンスを返します。
 </p>
 
 <pre><code class="language-go">
 func handler(w http.ResponseWriter, r *http.Request) {
-
-fmt.Fprintln(w, "Hello World")
-
+	fmt.Fprintln(w, "Hello World")
 }
 </code></pre>
 
 <p>
-このコードはブラウザに「Hello World」を表示します。
+このコードは、ブラウザに <code>Hello World</code> を表示します。
 </p>
 
+<p>
+引数の意味は次の通りです。
+</p>
+
+<ul>
+<li><code>w</code> はレスポンスを書き込むためのもの</li>
+<li><code>r</code> はブラウザから送られてきたリクエスト情報</li>
+</ul>
 </div>
 
 <div class="section">
-
 <h2>処理の流れ</h2>
 
 <p>
@@ -91,20 +99,39 @@ Webアプリは以下の流れで動作します。
 
 <pre><code class="language-text">
 Browser
- ↓
+  ↓
 HTTP Request
- ↓
+  ↓
 Go Server
- ↓
+  ↓
 Handler
- ↓
-Response
+  ↓
+HTTP Response
 </code></pre>
 
+<p>
+ブラウザからのアクセスを受け、Goサーバーが適切なハンドラを呼び出し、結果を返します。
+</p>
 </div>
 
 <div class="section">
+<h2>main.go で確認するポイント</h2>
 
+<p>
+main.go では、次の2つを探してみましょう。
+</p>
+
+<ul>
+<li><code>http.HandleFunc</code> でURLと関数を結んでいる部分</li>
+<li><code>handler</code> 関数の中で何を返しているか</li>
+</ul>
+
+<div class="notice">
+この2つが見つかると、GoのWebアプリがどう動いているか理解しやすくなります。
+</div>
+</div>
+
+<div class="section">
 <h2>演習</h2>
 
 <p>
@@ -112,7 +139,6 @@ main.go を開いて、次のコードを探してください。
 </p>
 
 <div class="exercise">
-
 <pre><code class="language-go">
 http.HandleFunc("/", handler)
 </code></pre>
@@ -126,26 +152,43 @@ http.HandleFunc("/", handler)
 <li>HTTPサーバーを起動する</li>
 <li>データベース接続を行う</li>
 </ul>
+</div>
 
+<div class="exercise">
+<pre><code class="language-go">
+func handler(w http.ResponseWriter, r *http.Request)
+</code></pre>
+
+<p>
+この関数は、何を受け取り、何を返す役割を持っているでしょうか？
+</p>
+</div>
+</div>
+
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson2では、URLと処理をつなぐ考え方を学びました。
+</p>
+
+<p>
+次のLesson3では、画面表示を整理するためにテンプレートを使っていきます。
+</p>
 </div>
 
 </div>
-
-</div>
-
 </div>
 
 <script>
+hljs.highlightAll();
 
-    hljs.highlightAll();
-    
-    fetch("../sidebar.html")
-    .then(res => res.text())
-    .then(data => {
-    document.getElementById("sidebar").innerHTML = data
-    })
-    
-    </script>
+fetch("../sidebar.html")
+.then(res => res.text())
+.then(data => {
+document.getElementById("sidebar").innerHTML = data
+})
+</script>
 
 </body>
 </html>

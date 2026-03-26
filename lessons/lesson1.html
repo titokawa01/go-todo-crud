@@ -122,67 +122,108 @@ font-size:14px;
 <!-- ここから lesson1 の中身 -->
 
 <div class="section">
-<h2>Go Webアプリの環境を準備する</h2>
-<p>このレッスンでは Go アプリを起動するための準備を行います。</p>
-<p>Goアプリは以下の構成で動きます。</p>
-<ul>
-<li>Go Web Server</li>
-<li>MySQL Database</li>
-<li>.env 設定ファイル</li>
-</ul>
-</div>
+    <h2>このアプリの全体像</h2>
+    
+    <p>
+    この研修では「CRUDアプリ」を作成します。
+    CRUDとは以下の操作のことです。
+    </p>
+    
+    <ul>
+    <li>Create（作成）</li>
+    <li>Read（取得）</li>
+    <li>Update（更新）</li>
+    <li>Delete（削除）</li>
+    </ul>
+    
+    <p>
+    最終的に、データベースに保存された情報をブラウザで操作できるアプリを作ります。
+    </p>
+    
+    </div>
 
-<div class="section">
-<h2>.env ファイルを作成する</h2>
-<p>アプリは .env ファイルからデータベース接続情報を読み込みます。</p>
-<div class="notice">.env が無いとアプリは起動できません</div>
+    <div class="section">
+        <h2>アプリの構成を理解する</h2>
+        
+        <p>このアプリは以下の3つで構成されています。</p>
+        
+        <ul>
+        <li><b>Go Web Server</b>：ブラウザからのリクエストを処理する</li>
+        <li><b>MySQL Database</b>：データを保存する</li>
+        <li><b>.env ファイル</b>：接続情報を管理する</li>
+        </ul>
+        
+        <div class="notice">
+        Webアプリは「画面」「サーバー」「データベース」の3層構造で動きます
+        </div>
+        
+    </div>
 
-<pre><code class="language-bash">
-SQL_USER=root
-SQL_PASSWORD=9999
-SQL_ADDR=localhost:3306
-SQL_DBNAME=mermaid
-PORT=8080
-</code></pre>
-</div>
+    <div class="section">
+        <h2>.env ファイルとは？</h2>
+        
+        <p>
+        .envファイルは「設定情報」をまとめたファイルです。
+        </p>
+        
+        <p>
+        例えばデータベースの接続情報をコードに直接書くと、
+        セキュリティ的に危険です。
+        </p>
+        
+        <div class="notice">
+        パスワードをコードに書くのはNGです
+        </div>
+        
+        <p>
+        そのため、環境変数として外部に分離します。
+        </p>
+        
+        <pre><code class="language-bash">
+        SQL_USER=root
+        SQL_PASSWORD=9999
+        SQL_ADDR=localhost:3306
+        SQL_DBNAME=mermaid
+        PORT=8080
+        </code></pre>
+        
+        </div>
 
-<div class="section">
-<h2>Goサーバーを起動する</h2>
-<p>以下のコマンドでGoアプリを起動します。</p>
+        <div class="section">
+            <h2>Goサーバーとは？</h2>
+            
+            <p>
+            Goサーバーはブラウザからのリクエストを受け取り、
+            処理結果を返す役割を持ちます。
+            </p>
+            
+            <p>
+            例えば以下のコードは「8080番ポートで待ち受ける」処理です。
+            </p>
+            
+            <pre><code class="language-go">
+            http.ListenAndServe(":8080", nil)
+            </code></pre>
+            
+            <ul>
+            <li>http：Web通信の仕組み</li>
+            <li>8080：ポート番号（アクセス入口）</li>
+            </ul>
+            
+            </div>
 
-<pre><code class="language-bash">
-go run main.go
-</code></pre>
-
-<p>ブラウザで以下のURLにアクセスします。</p>
-
-<pre><code class="language-bash">
-http://localhost:8080
-</code></pre>
-</div>
-
-<div class="section">
-<h2>演習</h2>
-<p>main.go を確認してサーバー起動部分を探してください。</p>
-
-<div class="exercise">
-<pre><code class="language-go">
-http.ListenAndServe(":8080", nil)
-</code></pre>
-
-<p>このコードは何をしているでしょうか？</p>
-</div>
-
-</div>
-
-<!-- ここまで -->
-
-</div>
-</div>
-
-<script>
-hljs.highlightAll();
-</script>
-
-</body>
-</html>
+            <div class="section">
+                <h2>演習</h2>
+                
+                <div class="exercise">
+                
+                <p>以下の質問に答えてください。</p>
+                
+                <ul>
+                <li>.envファイルはなぜ必要ですか？</li>
+                <li>8080ポートとは何ですか？</li>
+                <li>Goサーバーの役割は何ですか？</li>
+                </ul>
+                
+                </div>
+                </div>

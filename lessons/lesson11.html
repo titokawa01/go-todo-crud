@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Lesson11 研修の総まとめ</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div class="section">
+<h2>研修のゴール</h2>
+
+<p>
+この研修のゴールは、GoでCRUDアプリを完成させ、GitHubへ公開できるようになることです。
+</p>
+
+<div class="notice">
+ここまで学んだ内容をつなげると、ひとつのWebアプリとして動かせるようになります。
+</div>
+</div>
+
+<div class="section">
+<h2>ここまで学んだこと</h2>
+
+<ul>
+<li>GoでWebサーバーを起動する</li>
+<li>HTTPハンドラでURLごとの処理を分ける</li>
+<li>テンプレートで画面を表示する</li>
+<li>MySQLへ接続する</li>
+<li>Createでデータを保存する</li>
+<li>Readでデータを一覧表示する</li>
+<li>GitHubでコードを管理する</li>
+<li>.gitignoreで不要ファイルを除外する</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>CRUDアプリの完成イメージ</h2>
+
+<pre><code class="language-text">
+ブラウザのフォーム
+↓
+Go Handler
+↓
+Create / Read / Update / Delete
+↓
+MySQL Database
+↓
+HTML Template
+↓
+ブラウザに表示
+</code></pre>
+
+<p>
+この流れを自分で説明できるようになることが、とても大切です。
+</p>
+</div>
+
+<div class="section">
+<h2>実務での流れ</h2>
+
+<p>
+実際の開発では、次の順番で進めることが多いです。
+</p>
+
+<pre><code class="language-text">
+機能を追加する
+↓
+動作確認する
+↓
+git status で確認する
+↓
+git add / commit
+↓
+git push
+↓
+GitHubで履歴を残す
+</code></pre>
+
+<div class="notice">
+作ることと、記録することをセットで進めるのが大切です。
+</div>
+</div>
+
+<div class="section">
+<h2>最後の確認</h2>
+
+<p>
+次の質問に答えられれば、かなり理解が進んでいます。
+</p>
+
+<div class="exercise">
+<ul>
+<li>handlerは何をする？</li>
+<li>template.Executeは何をする？</li>
+<li>INSERTとSELECTの違いは？</li>
+<li>なぜ .gitignore が必要？</li>
+<li>GitHubへpushする意味は？</li>
+</ul>
+</div>
+</div>
+
+<div class="section">
+<h2>次のステップ</h2>
+
+<ul>
+<li>Lessonごとにコードを少しずつ改良する</li>
+<li>完成したCRUDアプリをGitHub PagesやGitHubで公開する</li>
+<li>必要に応じてAWSなどの公開先へ進む</li>
+</ul>
+
+<div class="notice">
+ここまで来たら、あとは作りながら覚えていく段階です。
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+hljs.highlightAll();
+
+fetch("../sidebar.html")
+.then(res => res.text())
+.then(data => {
+document.getElementById("sidebar").innerHTML = data;
+});
+});
+</script>
+
+</body>
+</html>

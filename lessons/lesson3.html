@@ -23,21 +23,41 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-
 <h2>HTMLテンプレートとは？</h2>
 
 <p>
-GoのWebアプリではHTMLテンプレートを使って画面を表示します。
+GoのWebアプリでは、HTMLテンプレートを使って画面を表示します。
 </p>
 
 <p>
-テンプレートを使うことで、サーバーのデータをHTMLに埋め込むことができます。
+テンプレートを使うと、画面のひな形をひとつ用意しておき、
+そこへサーバー側のデータを差し込むことができます。
 </p>
 
+<div class="notice">
+同じHTMLを使いながら、表示する内容だけを変えられるのがテンプレートの強みです。
+</div>
 </div>
 
 <div class="section">
+<h2>テンプレートを使う理由</h2>
 
+<p>
+もしテンプレートを使わずに画面を作ると、HTMLをGoコードの中に直接書くことになり、管理が難しくなります。
+</p>
+
+<p>
+テンプレートを使うと、画面の見た目と処理を分けやすくなります。
+</p>
+
+<ul>
+<li>HTMLの修正がしやすい</li>
+<li>データ表示を整理しやすい</li>
+<li>ページの共通化がしやすい</li>
+</ul>
+</div>
+
+<div class="section">
 <h2>テンプレートを読み込む</h2>
 
 <p>
@@ -49,17 +69,55 @@ tmpl, err := template.ParseFiles("templates/index.html")
 </code></pre>
 
 <p>
-このコードは HTMLテンプレートを読み込む処理です。
+このコードは、<code>templates/index.html</code> をテンプレートとして読み込む処理です。
 </p>
 
+<p>
+エラーが返ることもあるので、読み込みに失敗したら確認できるようにしておきます。
+</p>
+
+<pre><code class="language-go">
+if err != nil {
+	log.Fatal(err)
+}
+</code></pre>
 </div>
 
 <div class="section">
+<h2>データをテンプレートに渡す</h2>
 
+<p>
+テンプレートの強みは、Go側のデータをそのまま画面に反映できることです。
+</p>
+
+<pre><code class="language-go">
+type PageData struct {
+	Title string
+	Name  string
+}
+</code></pre>
+
+<p>
+このような構造体を作って、テンプレートに渡します。
+</p>
+
+<pre><code class="language-go">
+data := PageData{
+	Title: "Go研修",
+	Name:  "Lesson3",
+}
+</code></pre>
+
+<p>
+テンプレート内では、<code>{{.Title}}</code> や <code>{{.Name}}</code> のように書いて表示します。
+</p>
+</div>
+
+<div class="section">
 <h2>テンプレートを実行する</h2>
 
 <p>
-読み込んだテンプレートは <code>Execute</code> で表示します。
+読み込んだテンプレートは <code>Execute</code> で画面に反映します。
 </p>
 
 <pre><code class="language-go">
@@ -67,13 +125,15 @@ tmpl.Execute(w, data)
 </code></pre>
 
 <p>
-ここでHTMLがブラウザに送信されます。
+この処理で、テンプレートの中にデータが埋め込まれ、ブラウザにHTMLが送られます。
 </p>
 
+<div class="notice">
+<code>Execute</code> は「テンプレートを動かす」処理です。
+</div>
 </div>
 
 <div class="section">
-
 <h2>処理の流れ</h2>
 
 <pre><code class="language-text">
@@ -83,17 +143,21 @@ HTTP Request
  ↓
 Go Server
  ↓
-DBからデータ取得
+テンプレートを読み込む
  ↓
-HTMLテンプレートにデータを渡す
+データをテンプレートに渡す
+ ↓
+HTMLを生成して返す
  ↓
 Browserに表示
 </code></pre>
 
+<p>
+テンプレートを使うことで、画面表示を柔軟に変えられるようになります。
+</p>
 </div>
 
 <div class="section">
-
 <h2>演習</h2>
 
 <p>
@@ -101,7 +165,6 @@ main.go を開いて次のコードを探してください。
 </p>
 
 <div class="exercise">
-
 <pre><code class="language-go">
 tmpl.Execute(w, data)
 </code></pre>
@@ -115,13 +178,32 @@ tmpl.Execute(w, data)
 <li>HTMLをブラウザに送る</li>
 <li>DB接続を行う</li>
 </ul>
+</div>
 
+<div class="exercise">
+<pre><code class="language-go">
+tmpl, err := template.ParseFiles("templates/index.html")
+</code></pre>
+
+<p>
+このコードは何を読み込んでいるでしょうか？
+</p>
+</div>
+</div>
+
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson3では、HTMLテンプレートの基本を学びました。
+</p>
+
+<p>
+次のLesson4では、データベース接続の準備に進みます。
+</p>
 </div>
 
 </div>
-
-</div>
-
 </div>
 
 <script>

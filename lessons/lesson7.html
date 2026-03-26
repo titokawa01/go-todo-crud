@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson7 GitHubの使い方</title>
+<title>Lesson7 送信データの受け取り</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,119 +23,125 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-
-<h2>GitHubとは？</h2>
+<h2>画面から送信されたデータを受け取る</h2>
 
 <p>
-GitHubは、コードを保存・共有・管理するためのサービスです。
+Webアプリでは、フォームから送られた値をGoサーバー側で受け取ることができます。
 </p>
 
 <p>
-開発では、変更したコードをGitで記録し、
-GitHubに送ることで履歴を残します。
+このLessonでは、ブラウザから送信されたデータを読み取る基本を学びます。
 </p>
 
 <div class="notice">
-GitHubに上げる前に、変更内容を確認する習慣がとても大切です。
+ここで受け取った値は、次のLesson以降でDB保存につなげていきます。
 </div>
-
-</div>
-
-<div class="section">
-
-<h2>よく使うコマンド</h2>
-
-<p>
-この研修でまず覚えるのは次の3つです。
-</p>
-
-<pre><code class="language-bash">
-git add .
-git commit -m "commit message"
-git push
-</code></pre>
-
-<ul>
-<li><code>git add .</code> : 変更をステージングする</li>
-<li><code>git commit</code> : 変更を記録する</li>
-<li><code>git push</code> : GitHubへ送る</li>
-</ul>
-
 </div>
 
 <div class="section">
-
-<h2>作業の流れ</h2>
-
-<p>
-実際の流れは次のようになります。
-</p>
+<h2>フォーム送信の流れ</h2>
 
 <pre><code class="language-text">
-コードを編集
+ブラウザのフォーム
 ↓
-git status で確認
+HTTP POSTで送信
 ↓
-git add .
+Goのhandlerで受け取る
 ↓
-git commit -m "message"
+送信された値を取り出す
 ↓
-git push
+画面表示やDB保存につなげる
 </code></pre>
 
 <p>
-この流れを繰り返すことで、作業の履歴がGitHubに残ります。
+データを受け取る処理が分かると、Createの実装に進みやすくなります。
 </p>
-
 </div>
 
 <div class="section">
-
-<h2>git status で確認する</h2>
+<h2>値を受け取る</h2>
 
 <p>
-いきなり push するのではなく、
-まず <code>git status</code> で変更内容を確認します。
+Goでは、リクエストからフォームの値を取り出せます。
 </p>
 
-<pre><code class="language-bash">
-git status
+<pre><code class="language-go">
+func handler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	content := r.FormValue("content")
+	fmt.Fprintln(w, content)
+}
 </code></pre>
 
 <p>
-ここで、想定外のファイルが混ざっていないかを見ることができます。
+この例では、<code>content</code> という名前の入力欄から値を受け取っています。
 </p>
-
 </div>
 
 <div class="section">
-
-<h2>演習</h2>
+<h2>HTMLフォームの例</h2>
 
 <p>
-次のコマンドの意味を考えてみましょう。
+ブラウザ側では、次のようなフォームを使います。
 </p>
 
-<div class="exercise">
-
-<pre><code class="language-bash">
-git add .
-git commit -m "add lesson7"
-git push
+<pre><code class="language-html">
+<form method="post" action="/tasks">
+  <input type="text" name="content">
+  <button type="submit">送信</button>
+</form>
 </code></pre>
-
-<p>
-それぞれ何をしているか説明できるでしょうか？
-</p>
 
 <ul>
-<li>変更をまとめる</li>
-<li>記録を残す</li>
-<li>GitHubへ送る</li>
+<li><code>method="post"</code> → データを送る</li>
+<li><code>name="content"</code> → Go側で受け取る名前</li>
+<li><code>action="/tasks"</code> → 送信先URL</li>
 </ul>
-
 </div>
 
+<div class="section">
+<h2>よく使う考え方</h2>
+
+<p>
+フォーム送信では、HTMLとGoの名前をそろえることが大切です。
+</p>
+
+<div class="notice">
+HTMLの <code>name</code> 属性と、Goの <code>FormValue</code> の名前を一致させます。
+</div>
+</div>
+
+<div class="section">
+<h2>演習</h2>
+
+<div class="exercise">
+<p>
+次のコードは何をしているでしょうか？
+</p>
+
+<pre><code class="language-go">
+r.ParseForm()
+content := r.FormValue("content")
+</code></pre>
+</div>
+
+<div class="exercise">
+<p>
+HTMLフォームの <code>name="content"</code> は、Go側のどの処理と対応しているでしょうか？
+</p>
+</div>
+</div>
+
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson7では、画面から送信されたデータを受け取る方法を学びました。
+</p>
+
+<p>
+次のLesson8では、GitHubへの登録方法と <code>.gitignore</code> をまとめて整理します。
+</p>
 </div>
 
 </div>
@@ -144,15 +150,15 @@ git push
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  hljs.highlightAll();
+hljs.highlightAll();
 
-  fetch("../sidebar.html")
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById("sidebar").innerHTML = data;
-    });
+fetch("../sidebar.html")
+.then(res => res.text())
+.then(data => {
+document.getElementById("sidebar").innerHTML = data;
+});
 });
 </script>
 
 </body>
-</html> 
+</html>

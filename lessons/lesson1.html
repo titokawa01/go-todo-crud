@@ -90,6 +90,7 @@ overflow:auto;
 code{
 font-family:monospace;
 font-size:14px;
+color:#e5e7eb;
 }
 </style>
 
@@ -104,126 +105,164 @@ font-size:14px;
 <h2>Go研修</h2>
 
 <div class="nav-item">
-<a href="../lessons/lesson1.html">Lesson1</a>
+<a href="lesson1.html">Lesson1</a>
 </div>
 
 <div class="nav-item">
-<a href="../lessons/lesson2.html">Lesson2</a>
+<a href="lesson2.html">Lesson2</a>
 </div>
 
 <div class="nav-item">
-<a href="../lessons/lesson3.html">Lesson3</a>
+<a href="lesson3.html">Lesson3</a>
+</div>
+
+<div class="nav-item">
+<a href="lesson4.html">Lesson4</a>
+</div>
+
+<div class="nav-item">
+<a href="lesson5.html">Lesson5</a>
+</div>
+
+<div class="nav-item">
+<a href="lesson6.html">Lesson6</a>
+</div>
+
+<div class="nav-item">
+<a href="lesson7.html">Lesson7</a>
+</div>
+
+<div class="nav-item">
+<a href="lesson8.html">Lesson8</a>
+</div>
+
+<div class="nav-item">
+<a href="lesson9.html">Lesson9</a>
+</div>
+
+<div class="nav-item">
+<a href="lesson10.html">Lesson10</a>
+</div>
+
+<div class="nav-item">
+<a href="lesson11.html">Lesson11</a>
 </div>
 
 </div>
 
 <div class="main">
 
-<!-- ここから lesson1 の中身 -->
+<div class="section">
+<h2>このアプリの全体像</h2>
+
+<p>
+この研修では「CRUDアプリ」を作成します。
+CRUDとは以下の操作のことです。
+</p>
+
+<ul>
+<li>Create（作成）</li>
+<li>Read（取得）</li>
+<li>Update（更新）</li>
+<li>Delete（削除）</li>
+</ul>
+
+<p>
+最終的に、データベースに保存された情報をブラウザで操作できるアプリを作ります。
+</p>
+</div>
 
 <div class="section">
-    <h2>このアプリの全体像</h2>
-    
-    <p>
-    この研修では「CRUDアプリ」を作成します。
-    CRUDとは以下の操作のことです。
-    </p>
-    
-    <ul>
-    <li>Create（作成）</li>
-    <li>Read（取得）</li>
-    <li>Update（更新）</li>
-    <li>Delete（削除）</li>
-    </ul>
-    
-    <p>
-    最終的に、データベースに保存された情報をブラウザで操作できるアプリを作ります。
-    </p>
-    
-    </div>
+<h2>アプリの構成を理解する</h2>
 
-    <div class="section">
-        <h2>アプリの構成を理解する</h2>
-        
-        <p>このアプリは以下の3つで構成されています。</p>
-        
-        <ul>
-        <li><b>Go Web Server</b>：ブラウザからのリクエストを処理する</li>
-        <li><b>MySQL Database</b>：データを保存する</li>
-        <li><b>.env ファイル</b>：接続情報を管理する</li>
-        </ul>
-        
-        <div class="notice">
-        Webアプリは「画面」「サーバー」「データベース」の3層構造で動きます
-        </div>
-        
-    </div>
+<p>このアプリは以下の3つで構成されています。</p>
 
-    <div class="section">
-        <h2>.env ファイルとは？</h2>
-        
-        <p>
-        .envファイルは「設定情報」をまとめたファイルです。
-        </p>
-        
-        <p>
-        例えばデータベースの接続情報をコードに直接書くと、
-        セキュリティ的に危険です。
-        </p>
-        
-        <div class="notice">
-        パスワードをコードに書くのはNGです
-        </div>
-        
-        <p>
-        そのため、環境変数として外部に分離します。
-        </p>
-        
-        <pre><code class="language-bash">
-        SQL_USER=root
-        SQL_PASSWORD=9999
-        SQL_ADDR=localhost:3306
-        SQL_DBNAME=mermaid
-        PORT=8080
-        </code></pre>
-        
-        </div>
+<ul>
+<li><b>Go Web Server</b>：ブラウザからのリクエストを処理する</li>
+<li><b>MySQL Database</b>：データを保存する</li>
+<li><b>.env ファイル</b>：接続情報を管理する</li>
+</ul>
 
-        <div class="section">
-            <h2>Goサーバーとは？</h2>
-            
-            <p>
-            Goサーバーはブラウザからのリクエストを受け取り、
-            処理結果を返す役割を持ちます。
-            </p>
-            
-            <p>
-            例えば以下のコードは「8080番ポートで待ち受ける」処理です。
-            </p>
-            
-            <pre><code class="language-go">
-            http.ListenAndServe(":8080", nil)
-            </code></pre>
-            
-            <ul>
-            <li>http：Web通信の仕組み</li>
-            <li>8080：ポート番号（アクセス入口）</li>
-            </ul>
-            
-            </div>
+<div class="notice">
+Webアプリは「画面」「サーバー」「データベース」の3層構造で動きます
+</div>
+</div>
 
-            <div class="section">
-                <h2>演習</h2>
-                
-                <div class="exercise">
-                
-                <p>以下の質問に答えてください。</p>
-                
-                <ul>
-                <li>.envファイルはなぜ必要ですか？</li>
-                <li>8080ポートとは何ですか？</li>
-                <li>Goサーバーの役割は何ですか？</li>
-                </ul>
-                
-                </div>
-                </div>
+<div class="section">
+<h2>.env ファイルとは？</h2>
+
+<p>
+.envファイルは「設定情報」をまとめたファイルです。
+</p>
+
+<p>
+例えばデータベースの接続情報をコードに直接書くと、
+セキュリティ的に危険です。
+</p>
+
+<div class="notice">
+パスワードをコードに書くのはNGです
+</div>
+
+<p>
+そのため、環境変数として外部に分離します。
+</p>
+
+<pre><code class="language-bash">
+SQL_USER=root
+SQL_PASSWORD=9999
+SQL_ADDR=localhost:3306
+SQL_DBNAME=mermaid
+PORT=8080
+</code></pre>
+
+</div>
+
+<div class="section">
+<h2>Goサーバーとは？</h2>
+
+<p>
+Goサーバーはブラウザからのリクエストを受け取り、
+処理結果を返す役割を持ちます。
+</p>
+
+<p>
+例えば以下のコードは「8080番ポートで待ち受ける」処理です。
+</p>
+
+<pre><code class="language-go">
+http.ListenAndServe(":8080", nil)
+</code></pre>
+
+<ul>
+<li>http：Web通信の仕組み</li>
+<li>8080：ポート番号（アクセス入口）</li>
+</ul>
+
+</div>
+
+<div class="section">
+<h2>演習</h2>
+
+<div class="exercise">
+
+<p>以下の質問に答えてください。</p>
+
+<ul>
+<li>.envファイルはなぜ必要ですか？</li>
+<li>8080ポートとは何ですか？</li>
+<li>Goサーバーの役割は何ですか？</li>
+</ul>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+hljs.highlightAll();
+</script>
+
+</body>
+</html>

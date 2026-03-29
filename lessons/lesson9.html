@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson9 Createの実装</title>
+<title>Lesson9 Deleteの実装</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,97 +23,127 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-<h2>Createとは？</h2>
+<h2>このレッスンのゴール</h2>
 
 <p>
-Createは、フォームから送られたデータをデータベースに保存する処理です。
+Lesson8 では、ファイルを受け取って保存する Upload を学びました。
 </p>
 
 <p>
-このLessonでは、画面から受け取った値をDBへ登録する流れを学びます。
+Lesson9 では、データを削除する <strong>Delete</strong> の実装を学びます。
+</p>
+
+<p>
+ここでは、一覧画面から対象のデータを選び、DB から削除して、画面を更新する流れを確認します。
+</p>
+</div>
+
+<div class="section">
+<h2>Deleteとは？</h2>
+
+<p>
+Delete は、データベースに保存されたデータを削除する処理です。
+</p>
+
+<p>
+不要になったレコードを消したり、間違って登録したデータを取り除いたりするときに使います。
 </p>
 
 <div class="notice">
-ここで「受け取る」と「保存する」がつながります。
+Delete は慎重に扱う必要があります。
+どのデータを消すのかを、ID で明確に指定するのが基本です。
 </div>
 </div>
 
 <div class="section">
-<h2>処理の流れ</h2>
+<h2>Deleteの処理の流れ</h2>
 
 <pre><code class="language-text">
-ブラウザのフォーム
+一覧画面の削除ボタン
 ↓
-Goのhandlerで受け取る
+GoのhandlerでIDを受け取る
 ↓
-入力値を取り出す
-↓
-INSERTでDBに保存する
+SQLで対象データを削除する
 ↓
 一覧画面へ戻る
 </code></pre>
 
 <p>
-Createは、CRUDアプリの最初の完成ポイントです。
+Delete は、対象を特定できるようにしてから実行します。
 </p>
 </div>
 
 <div class="section">
-<h2>フォームの値を受け取る</h2>
+<h2>削除対象のIDを受け取る</h2>
 
 <p>
-Lesson7で学んだように、フォームから送られた値は <code>FormValue</code> で取り出せます。
+削除するときは、どのデータを消すのかを ID で指定します。
 </p>
 
 <pre><code class="language-go">
-func handler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost {
-		r.ParseForm()
-		content := r.FormValue("content")
-		_ = content
-	}
-}
+idStr := r.URL.Query().Get("id")
 </code></pre>
 
 <p>
-ここで取り出した値を、そのままDB保存に使います。
+URL のクエリパラメータから、削除したいデータの ID を取り出します。
 </p>
+
+<p>
+そのあとで、文字列を数値に変換します。
+</p>
+
+<pre><code class="language-go">
+id, err := strconv.Atoi(idStr)
+if err != nil {
+	log.Println(err)
+	return
+}
+</code></pre>
+
+<div class="notice">
+URL に入っている値は文字列なので、数値として使うときは変換が必要です。
+</div>
 </div>
 
 <div class="section">
-<h2>INSERTで保存する</h2>
+<h2>SQLで削除する</h2>
 
 <p>
-データを保存するときは、SQLの <code>INSERT</code> を使います。
+DB からデータを消すときは <code>DELETE</code> を使います。
 </p>
 
 <pre><code class="language-go">
 _, err := db.Exec(
-	"INSERT INTO tasks (content) VALUES (?)",
-	content,
+	"DELETE FROM tasks WHERE id = ?",
+	id,
 )
+if err != nil {
+	log.Println(err)
+	return
+}
 </code></pre>
 
 <p>
-このコードは、tasksテーブルに新しいデータを追加します。
+このコードは、tasks テーブルの中から指定した ID のデータを削除します。
 </p>
 
 <ul>
+<li><code>DELETE FROM</code> → データを削除する</li>
+<li><code>WHERE id = ?</code> → 対象を1件に絞る</li>
 <li><code>db.Exec</code> → SQLを実行する</li>
-<li><code>INSERT INTO</code> → データを追加する</li>
-<li><code>?</code> → 安全に値を渡すためのプレースホルダ</li>
 </ul>
 
 <div class="notice">
-文字列を直接つなぐのではなく、プレースホルダを使うのが基本です。
+<code>WHERE</code> がないと、意図しない大量削除になる危険があります。
+必ず対象を絞って使いましょう。
 </div>
 </div>
 
 <div class="section">
-<h2>保存後の流れ</h2>
+<h2>削除後の流れ</h2>
 
 <p>
-保存できたら、一覧画面へ戻すと使いやすくなります。
+削除が終わったら、一覧画面へ戻します。
 </p>
 
 <pre><code class="language-go">
@@ -121,19 +151,66 @@ http.Redirect(w, r, "/", http.StatusSeeOther)
 </code></pre>
 
 <p>
-これは、保存後にトップページへ移動する処理です。
+これにより、削除結果が反映された一覧をすぐに確認できます。
 </p>
+</div>
+
+<div class="section">
+<h2>もし Upload のファイルも削除したい場合</h2>
+
+<p>
+Upload でサーバーに保存したファイルがある場合は、
+DB のレコードだけでなく、ファイル本体も削除したいことがあります。
+</p>
+
+<pre><code class="language-go">
+err := os.Remove("./uploads/" + filename)
+if err != nil {
+	log.Println(err)
+	return
+}
+</code></pre>
+
+<p>
+この処理を入れると、DB のデータとサーバー上のファイルをそろえて消せます。
+</p>
+
+<div class="notice">
+DB の削除とファイルの削除は別処理です。
+必要に応じて両方を実行します。
+</div>
 </div>
 
 <div class="section">
 <h2>よくある確認ポイント</h2>
 
 <ul>
-<li>フォームの <code>name</code> と <code>FormValue</code> が一致しているか</li>
-<li>SQL文のテーブル名とカラム名が正しいか</li>
-<li>DB接続が成功しているか</li>
-<li>保存後の遷移先が正しいか</li>
+<li>ID を正しく受け取れているか</li>
+<li><code>strconv.Atoi</code> で数値に変換できているか</li>
+<li><code>DELETE FROM ... WHERE id = ?</code> になっているか</li>
+<li>削除後に一覧へ戻しているか</li>
+<li>Upload したファイルを消すなら <code>os.Remove</code> も必要か</li>
 </ul>
+</div>
+
+<div class="section">
+<h2>main.go で確認するポイント</h2>
+
+<p>
+main.go では、次の流れを探してみましょう。
+</p>
+
+<ul>
+<li>削除ボタンから ID を渡しているか</li>
+<li><code>r.URL.Query().Get("id")</code> で受け取っているか</li>
+<li><code>strconv.Atoi</code> で変換しているか</li>
+<li><code>db.Exec("DELETE ...")</code> で削除しているか</li>
+<li><code>http.Redirect</code> で戻しているか</li>
+</ul>
+
+<div class="notice">
+Delete は、ID の受け取りと SQL の条件指定がポイントです。
+</div>
 </div>
 
 <div class="section">
@@ -145,7 +222,7 @@ http.Redirect(w, r, "/", http.StatusSeeOther)
 </p>
 
 <pre><code class="language-go">
-content := r.FormValue("content")
+idStr := r.URL.Query().Get("id")
 </code></pre>
 </div>
 
@@ -155,13 +232,19 @@ content := r.FormValue("content")
 </p>
 
 <pre><code class="language-go">
-INSERT INTO tasks (content) VALUES (?)
+DELETE FROM tasks WHERE id = ?
 </code></pre>
 </div>
 
 <div class="exercise">
 <p>
-保存後に <code>redirect</code> するのはなぜでしょうか？
+なぜ <code>WHERE id = ?</code> を付ける必要があるのでしょうか？
+</p>
+</div>
+
+<div class="exercise">
+<p>
+Upload で保存したファイルも消したいときは、どの処理を追加すればよいでしょうか？
 </p>
 </div>
 </div>
@@ -170,11 +253,11 @@ INSERT INTO tasks (content) VALUES (?)
 <h2>次のLessonへ</h2>
 
 <p>
-Lesson9では、画面から受け取ったデータをDBへ保存する流れを学びました。
+Lesson9では、データを削除する Delete の流れを学びました。
 </p>
 
 <p>
-次のLesson10では、保存したデータを一覧で表示するRead処理を学びます。
+ここまでで、Create、Read、Upload、Delete の流れがそろってきました。
 </p>
 </div>
 

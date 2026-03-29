@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson10 Readの実装</title>
+<title>Lesson10 REST API / HTTPメソッド</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,115 +23,198 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-<h2>Readとは？</h2>
+<h2>このレッスンのゴール</h2>
 
 <p>
-Readは、データベースに保存された情報を取り出して表示する処理です。
+Lesson9 までで、Create・Read・Upload・Delete の流れを少しずつ学んできました。
 </p>
 
 <p>
-CRUDの中でも、まず一番見える形で動かしやすいのがReadです。
+Lesson10 では、それらの処理を整理するための
+<strong>REST API</strong>
+と
+<strong>HTTPメソッド</strong>
+の考え方を学びます。
+</p>
+
+<p>
+ここを理解すると、URL だけでなく「どの方法で送られたリクエストか」を見て処理を分けられるようになります。
+</p>
+</div>
+
+<div class="section">
+<h2>REST APIとは</h2>
+
+<p>
+REST は、HTTP のルールを使って API を設計する考え方です。
+</p>
+
+<p>
+Webアプリでは、ブラウザやフォームから送られてきたリクエストに対して、
+<strong>どの HTTP メソッドで送られたか</strong>
+を見て処理を分けることがあります。
 </p>
 
 <div class="notice">
-保存したデータを一覧で確認できると、アプリらしさが一気に出ます。
+REST API は難しい専門用語に見えますが、まずは
+「GET / POST / PUT / DELETE を使い分ける仕組み」
+だと考えると理解しやすいです。
 </div>
 </div>
 
 <div class="section">
-<h2>SELECTで取得する</h2>
+<h2>HTTPメソッド</h2>
 
 <p>
-DBからデータを取り出すときは <code>SELECT</code> を使います。
-</p>
-
-<pre><code class="language-go">
-rows, err := db.Query("SELECT id, content FROM tasks")
-</code></pre>
-
-<p>
-このSQLは、tasksテーブルの <code>id</code> と <code>content</code> を取得します。
+HTTP では、リクエストの種類をメソッドで表します。
 </p>
 
 <ul>
-<li><code>db.Query</code> → 複数行のデータを取得する</li>
-<li><code>rows</code> → 取得結果を順番に読むためのもの</li>
+<li><strong>GET</strong> → 取得する</li>
+<li><strong>POST</strong> → 送信する / 作成する</li>
+<li><strong>PUT</strong> → 更新する</li>
+<li><strong>DELETE</strong> → 削除する</li>
 </ul>
-</div>
-
-<div class="section">
-<h2>取得したデータを読む</h2>
 
 <p>
-取得した <code>rows</code> は、そのままでは画面に出せません。
+CRUD と対応させると、次のように見えます。
 </p>
-
-<p>
-1行ずつ読み取って、表示用のデータに整えます。
-</p>
-
-<pre><code class="language-go">
-for rows.Next() {
-	var id int
-	var content string
-	rows.Scan(&id, &content)
-}
-</code></pre>
-
-<p>
-この流れで、データベースの中身をGoの変数に取り出せます。
-</p>
-</div>
-
-<div class="section">
-<h2>画面に渡す</h2>
-
-<p>
-取り出したデータは、テンプレートに渡して一覧画面として表示します。
-</p>
-
-<pre><code class="language-go">
-data := struct {
-	Tasks []Task
-}{
-	Tasks: tasks,
-}
-</code></pre>
-
-<p>
-テンプレート側では、配列として受け取り、繰り返し表示できます。
-</p>
-</div>
-
-<div class="section">
-<h2>一覧表示のイメージ</h2>
 
 <pre><code class="language-text">
-tasksテーブル
-↓
-SELECTで取得
-↓
-Goで整形
-↓
-template.Executeで表示
-↓
-ブラウザで一覧を見る
+GET    → Read
+POST   → Create
+PUT    → Update
+DELETE → Delete
 </code></pre>
 
 <p>
-Readが完成すると、Createで保存したデータを確認できるようになります。
+この対応関係を覚えておくと、コードを読むときに迷いにくくなります。
 </p>
 </div>
 
 <div class="section">
-<h2>よくある確認ポイント</h2>
+<h2>Goでの実装イメージ</h2>
+
+<p>
+Go では、<code>r.Method</code> を見て処理を分けます。
+</p>
+
+<pre><code class="language-go">
+func handler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+
+	case http.MethodPost:
+		// Create の処理
+
+	case http.MethodPut:
+		// Update の処理
+
+	case http.MethodDelete:
+		// Delete の処理
+
+	case http.MethodGet:
+		// Read の処理
+
+	default:
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+</code></pre>
+
+<p>
+このように書くと、1つの URL に対して複数の処理をまとめて扱えます。
+</p>
+</div>
+
+<div class="section">
+<h2>なぜメソッドで分けるのか</h2>
+
+<p>
+同じ URL でも、送られてくる方法が違えば意味が変わります。
+</p>
+
+<p>
+たとえば、<code>/tasks</code> という同じ URL でも、次のように分けられます。
+</p>
 
 <ul>
-<li>SQLのカラム名は正しいか</li>
-<li><code>rows.Next()</code> を使っているか</li>
-<li><code>rows.Scan()</code> の順番は合っているか</li>
-<li>テンプレートへデータを渡せているか</li>
+<li><strong>GET /tasks</strong> → 一覧を見る</li>
+<li><strong>POST /tasks</strong> → 新しいデータを作る</li>
+<li><strong>DELETE /tasks</strong> → データを消す</li>
 </ul>
+
+<div class="notice">
+URL と HTTPメソッドを組み合わせると、処理を整理しやすくなります。
+</div>
+</div>
+
+<div class="section">
+<h2>フォームとの関係</h2>
+
+<p>
+ブラウザのフォームは、主に <code>GET</code> か <code>POST</code> で送信します。
+</p>
+
+<pre><code class="language-html">
+<form action="/tasks" method="POST">
+  <input type="text" name="content">
+  <button type="submit">送信</button>
+</form>
+</code></pre>
+
+<p>
+このフォームから送られたデータは、Go 側で <code>r.Method</code> を見て判定し、
+Create の処理へつなげられます。
+</p>
+
+<p>
+Delete や Update では、フォーム以外の方法を使うこともありますが、
+まずは「メソッドで処理を分ける」という考え方を押さえましょう。
+</p>
+</div>
+
+<div class="section">
+<h2>処理の流れ</h2>
+
+<pre><code class="language-text">
+ブラウザ / フォーム
+↓
+HTTPリクエスト
+↓
+Goのhandler
+↓
+r.Method を確認
+↓
+GET / POST / PUT / DELETE で分岐
+↓
+それぞれの処理を実行
+↓
+画面表示やDB操作へつなげる
+</code></pre>
+
+<p>
+この流れを理解できると、次のレッスンでフォーム送信データを受け取るときに、
+「どのメソッドで来たのか」を自然に意識できるようになります。
+</p>
+</div>
+
+<div class="section">
+<h2>main.go で確認するポイント</h2>
+
+<p>
+main.go では、次の点を探してみましょう。
+</p>
+
+<ul>
+<li><code>r.Method</code> で処理を分けているか</li>
+<li><code>http.MethodGet</code> や <code>http.MethodPost</code> が使われているか</li>
+<li>メソッドごとに何をしているか</li>
+<li>想定していないメソッドをどう扱っているか</li>
+</ul>
+
+<div class="notice">
+まずは「HTTPメソッドを見て処理を切り替える」という考え方に慣れることが大切です。
+</div>
 </div>
 
 <div class="section">
@@ -139,23 +222,37 @@ Readが完成すると、Createで保存したデータを確認できるよう�
 
 <div class="exercise">
 <p>
-次のコードは何をしているでしょうか？
+次のメソッドは、それぞれ何の操作に対応するでしょうか？
 </p>
 
-<pre><code class="language-go">
-rows, err := db.Query("SELECT id, content FROM tasks")
+<pre><code class="language-text">
+GET
+POST
+PUT
+DELETE
 </code></pre>
 </div>
 
 <div class="exercise">
 <p>
-なぜ <code>rows.Next()</code> が必要なのでしょうか？
+次のコードは何をしているでしょうか？
 </p>
+
+<pre><code class="language-go">
+switch r.Method {
+
+case http.MethodPost:
+case http.MethodPut:
+case http.MethodDelete:
+case http.MethodGet:
+
+}
+</code></pre>
 </div>
 
 <div class="exercise">
 <p>
-取得したデータをブラウザに見せるには、どの処理につなげる必要があるでしょうか？
+同じ URL でも、HTTPメソッドによって処理を分けるのはなぜでしょうか？
 </p>
 </div>
 </div>
@@ -164,16 +261,15 @@ rows, err := db.Query("SELECT id, content FROM tasks")
 <h2>次のLessonへ</h2>
 
 <p>
-Lesson10では、データベースからデータを取り出して一覧表示する流れを学びました。
+Lesson10では、REST API と HTTPメソッドの考え方を学びました。
 </p>
 
 <p>
-次のLesson11では、研修の総まとめとしてCRUDアプリ全体を振り返ります。
+次の Lesson11 では、フォームから送信されたデータを受け取る方法を整理します。
 </p>
 </div>
 
 </div>
-
 </div>
 
 <script>

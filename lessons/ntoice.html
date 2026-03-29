@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>用語集</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+body{
+margin:0;
+font-family: system-ui;
+background:#f6f7f9;
+}
+
+.layout{
+display:flex;
+height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:#111827;
+color:white;
+padding:20px;
+overflow:auto;
+}
+
+.sidebar h2{
+margin-top:0;
+}
+
+.nav-item{
+padding:10px;
+border-radius:6px;
+cursor:pointer;
+margin-bottom:6px;
+}
+
+.nav-item a{
+color:white;
+text-decoration:none;
+display:block;
+}
+
+.nav-item:hover{
+background:#1f2937;
+}
+
+.main{
+flex:1;
+overflow:auto;
+padding:40px;
+}
+
+.section{
+background:white;
+border-radius:12px;
+padding:24px;
+margin-bottom:24px;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+.notice{
+background:#fff4db;
+padding:16px;
+border-radius:8px;
+margin-top:16px;
+line-height:1.7;
+}
+
+.exercise{
+background:#eef6ff;
+padding:16px;
+border-radius:8px;
+margin-top:16px;
+line-height:1.7;
+}
+
+pre{
+background:#0f172a;
+padding:16px;
+border-radius:8px;
+overflow:auto;
+}
+
+code{
+font-family:monospace;
+font-size:14px;
+color:#e5e7eb;
+}
+
+.term-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+gap:16px;
+margin-top:16px;
+}
+
+.term-card{
+border:1px solid #e5e7eb;
+border-radius:12px;
+padding:16px;
+background:#fff;
+}
+
+.term-card h3{
+margin:0 0 8px 0;
+font-size:18px;
+}
+
+.term-tag{
+display:inline-block;
+font-size:12px;
+padding:4px 8px;
+border-radius:999px;
+background:#e5e7eb;
+margin-bottom:10px;
+}
+
+.index-list{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:12px;
+}
+
+.index-list a{
+display:inline-block;
+padding:8px 12px;
+border-radius:999px;
+background:#eef2ff;
+text-decoration:none;
+color:#1f2937;
+font-size:14px;
+}
+
+.index-list a:hover{
+background:#dbe4ff;
+}
+
+.term-example{
+margin-top:10px;
+padding:12px;
+border-left:4px solid #cbd5e1;
+background:#f8fafc;
+border-radius:8px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div class="sidebar">
+
+<h2>Go研修</h2>
+
+<div id="sidebar"></div>
+
+</div>
+
+<div class="main">
+
+<div class="section">
+<h2>用語集</h2>
+
+<p>
+このページでは、研修でよく出てくる言葉をまとめています。
+分からなくなったら、ここに戻って確認してください。
+</p>
+
+<div class="notice">
+用語は「丸暗記」よりも、「どの場面で使うか」と一緒に覚えると理解しやすくなります。
+</div>
+
+<div class="index-list">
+<a href="#go">Goの基本</a>
+<a href="#web">Webの基本</a>
+<a href="#template">テンプレート</a>
+<a href="#db">DB / SQL</a>
+<a href="#form">フォーム送信</a>
+<a href="#upload">Upload</a>
+<a href="#delete">Delete</a>
+<a href="#git">Git / GitHub</a>
+</div>
+</div>
+
+<div class="section" id="go">
+<h2>Goの基本</h2>
+
+<div class="term-grid">
+
+<div class="term-card">
+<div class="term-tag">Goの入り口</div>
+<h3>Go</h3>
+<p>
+Google が開発したプログラミング言語です。
+この研修では、Webアプリを作るために使います。
+</p>
+<div class="term-example">
+例: Go でサーバーを立てて、ブラウザに画面を返します。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">プロジェクト管理</div>
+<h3>module</h3>
+<p>
+Go のプロジェクトを管理する単位です。
+<code>go mod init</code> で作ります。
+</p>
+<div class="term-example">
+例: <code>go mod init example.com/go-todo-crud</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">実行開始点</div>
+<h3>main.go</h3>
+<p>
+Go プログラムの中心になるファイルです。
+<code>package main</code> と <code>func main()</code> がよく出てきます。
+</p>
+<div class="term-example">
+例: まず <code>main.go</code> を実行してサーバーを起動します。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">処理の入口</div>
+<h3>main関数</h3>
+<p>
+プログラムの開始地点です。
+Go では <code>func main()</code> から処理が始まります。
+</p>
+<div class="term-example">
+例: ルート設定やサーバー起動をここで行います。
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="section" id="web">
+<h2>Webの基本</h2>
+
+<div class="term-grid">
+
+<div class="term-card">
+<div class="term-tag">受付担当</div>
+<h3>handler</h3>
+<p>
+リクエストを受け取り、レスポンスを返す関数です。
+URL ごとの処理を担当します。
+</p>
+<div class="term-example">
+例: <code>func handler(w http.ResponseWriter, r *http.Request)</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">送信情報</div>
+<h3>request</h3>
+<p>
+ブラウザからサーバーに送られる情報です。
+URL、メソッド、フォーム内容などが含まれます。
+</p>
+<div class="term-example">
+例: フォーム送信時のデータは request に入ります。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">返す情報</div>
+<h3>response</h3>
+<p>
+サーバーからブラウザへ返す情報です。
+HTML 画面やメッセージなどが含まれます。
+</p>
+<div class="term-example">
+例: テンプレートで作った HTML を返します。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">入口の名前</div>
+<h3>route</h3>
+<p>
+URL と処理の対応関係です。
+どの URL に、どの handler を割り当てるかを決めます。
+</p>
+<div class="term-example">
+例: <code>http.HandleFunc("/", handler)</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">通信方法</div>
+<h3>HTTPメソッド</h3>
+<p>
+リクエストの種類を表します。
+GET、POST、PUT、DELETE などがあります。
+</p>
+<div class="term-example">
+例: POST は送信、GET は取得に使います。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">分岐条件</div>
+<h3><code>r.Method</code></h3>
+<p>
+送られてきた HTTP メソッドを確認するための値です。
+GET か POST かを見分けるときに使います。
+</p>
+<div class="term-example">
+例: <code>if r.Method == http.MethodPost</code>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="section" id="template">
+<h2>テンプレート</h2>
+
+<div class="term-grid">
+
+<div class="term-card">
+<div class="term-tag">画面のひな形</div>
+<h3>template</h3>
+<p>
+HTML のひな形です。
+Go 側のデータを差し込んで画面を作ります。
+</p>
+<div class="term-example">
+例: 同じ HTML を使って、表示内容だけ変えられます。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">読み込み</div>
+<h3>ParseFiles</h3>
+<p>
+HTML ファイルをテンプレートとして読み込むための処理です。
+</p>
+<div class="term-example">
+例: <code>template.ParseFiles("templates/index.html")</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">実行</div>
+<h3>Execute</h3>
+<p>
+テンプレートにデータを入れて、HTML として出力する処理です。
+</p>
+<div class="term-example">
+例: <code>tmpl.Execute(w, data)</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">書き込み先</div>
+<h3><code>w</code></h3>
+<p>
+レスポンスを書き込むための値です。
+テンプレートの出力先として使います。
+</p>
+<div class="term-example">
+例: HTML をブラウザに返すときに使います。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">入力データ</div>
+<h3><code>data</code></h3>
+<p>
+テンプレートに渡す情報です。
+タイトルや一覧データなどを入れます。
+</p>
+<div class="term-example">
+例: <code>Title</code> や <code>Tasks</code> をまとめて渡します。
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="section" id="db">
+<h2>DB / SQL</h2>
+
+<div class="term-grid">
+
+<div class="term-card">
+<div class="term-tag">保存場所</div>
+<h3>Database</h3>
+<p>
+データを保存しておく場所です。
+この研修では MySQL を使います。
+</p>
+<div class="term-example">
+例: タスク一覧を DB に保存します。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">DB操作言語</div>
+<h3>SQL</h3>
+<p>
+データベースを操作するための言語です。
+取得、追加、更新、削除に使います。
+</p>
+<div class="term-example">
+例: <code>SELECT</code>、<code>INSERT</code>、<code>UPDATE</code>、<code>DELETE</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">接続準備</div>
+<h3><code>sql.Open</code></h3>
+<p>
+データベース接続のための準備をする処理です。
+</p>
+<div class="term-example">
+例: <code>db, err := sql.Open(...)</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">接続確認</div>
+<h3><code>db.Ping()</code></h3>
+<p>
+DB に本当に接続できるか確認する処理です。
+</p>
+<div class="term-example">
+例: 接続情報が正しいかをチェックします。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">追加</div>
+<h3>INSERT</h3>
+<p>
+データを新しく追加する SQL です。
+Create で使います。
+</p>
+<div class="term-example">
+例: <code>INSERT INTO tasks (content) VALUES (?)</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">取得</div>
+<h3>SELECT</h3>
+<p>
+データを取り出す SQL です。
+Read で使います。
+</p>
+<div class="term-example">
+例: <code>SELECT id, content FROM tasks</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">更新</div>
+<h3>UPDATE</h3>
+<p>
+既存のデータを変更する SQL です。
+</p>
+<div class="term-example">
+例: <code>UPDATE tasks SET content = ? WHERE id = ?</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">削除</div>
+<h3>DELETE</h3>
+<p>
+データを削除する SQL です。
+Delete で使います。
+</p>
+<div class="term-example">
+例: <code>DELETE FROM tasks WHERE id = ?</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">複数行取得</div>
+<h3><code>db.Query</code></h3>
+<p>
+複数行の結果を取得する処理です。
+Read でよく使います。
+</p>
+<div class="term-example">
+例: 一覧表示するときに使います。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">実行</div>
+<h3><code>db.Exec</code></h3>
+<p>
+SQL を実行する処理です。
+INSERT、UPDATE、DELETE などに使います。
+</p>
+<div class="term-example">
+例: データを追加したり削除したりします。
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="section" id="form">
+<h2>フォーム送信</h2>
+
+<div class="term-grid">
+
+<div class="term-card">
+<div class="term-tag">送信準備</div>
+<h3><code>ParseForm</code></h3>
+<p>
+フォーム送信された値を Go が読めるようにする処理です。
+</p>
+<div class="term-example">
+例: <code>r.ParseForm()</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">値の取得</div>
+<h3><code>FormValue</code></h3>
+<p>
+フォームから送られた値を取り出す処理です。
+</p>
+<div class="term-example">
+例: <code>content := r.FormValue("content")</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">入力名</div>
+<h3><code>name</code></h3>
+<p>
+HTMLフォームの入力欄につける名前です。
+Go 側の <code>FormValue</code> と対応させます。
+</p>
+<div class="term-example">
+例: <code>&lt;input name="content"&gt;</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">送信先</div>
+<h3><code>action</code></h3>
+<p>
+フォームの送信先 URL を指定する属性です。
+</p>
+<div class="term-example">
+例: <code>&lt;form action="/tasks" method="POST"&gt;</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">送信方法</div>
+<h3><code>method</code></h3>
+<p>
+フォームがどの HTTP メソッドで送信されるかを決めます。
+</p>
+<div class="term-example">
+例: GET か POST を指定します。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">二重送信防止</div>
+<h3>redirect</h3>
+<p>
+処理後に別のページへ移動することです。
+保存後に一覧へ戻すときによく使います。
+</p>
+<div class="term-example">
+例: <code>http.Redirect(w, r, "/", http.StatusSeeOther)</code>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="section" id="upload">
+<h2>Upload</h2>
+
+<div class="term-grid">
+
+<div class="term-card">
+<div class="term-tag">ファイル送信</div>
+<h3>Upload</h3>
+<p>
+ブラウザから送られたファイルをサーバーに保存する処理です。
+</p>
+<div class="term-example">
+例: 画像や添付ファイルを受け取ります。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">送信形式</div>
+<h3><code>multipart/form-data</code></h3>
+<p>
+ファイルを送るときに使うフォームの形式です。
+</p>
+<div class="term-example">
+例: <code>enctype="multipart/form-data"</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">ファイル取得</div>
+<h3><code>FormFile</code></h3>
+<p>
+フォームから送られたファイルを取り出す処理です。
+</p>
+<div class="term-example">
+例: <code>file, header, err := r.FormFile("file")</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">保存先作成</div>
+<h3><code>os.Create</code></h3>
+<p>
+保存先のファイルを作る処理です。
+</p>
+<div class="term-example">
+例: <code>dst, err := os.Create("./uploads/" + header.Filename)</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">コピー</div>
+<h3><code>io.Copy</code></h3>
+<p>
+ファイルの中身を別の場所へコピーする処理です。
+</p>
+<div class="term-example">
+例: 受け取ったファイルを保存先へ書き込みます。
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="section" id="delete">
+<h2>Delete</h2>
+
+<div class="term-grid">
+
+<div class="term-card">
+<div class="term-tag">削除対象</div>
+<h3>ID</h3>
+<p>
+どのデータを削除するかを指定する番号です。
+</p>
+<div class="term-example">
+例: 一覧から選んだタスクの ID を使います。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">URLの値</div>
+<h3><code>Query</code></h3>
+<p>
+URL のクエリパラメータを取り出す処理です。
+</p>
+<div class="term-example">
+例: <code>r.URL.Query().Get("id")</code>
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">文字列→数値</div>
+<h3><code>strconv.Atoi</code></h3>
+<p>
+文字列を整数に変換する処理です。
+</p>
+<div class="term-example">
+例: URL から受け取った ID を数値にします。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">ファイル削除</div>
+<h3><code>os.Remove</code></h3>
+<p>
+サーバー上のファイルを削除する処理です。
+Upload したファイルを消すときに使います。
+</p>
+<div class="term-example">
+例: <code>os.Remove("./uploads/" + filename)</code>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="section" id="git">
+<h2>Git / GitHub</h2>
+
+<div class="term-grid">
+
+<div class="term-card">
+<div class="term-tag">履歴管理</div>
+<h3>Git</h3>
+<p>
+コードの変更履歴を管理する仕組みです。
+</p>
+<div class="term-example">
+例: 変更した内容を記録して戻せるようにします。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">共有先</div>
+<h3>GitHub</h3>
+<p>
+Git の履歴をオンラインで管理できるサービスです。
+</p>
+<div class="term-example">
+例: 作ったコードを公開したり、履歴を残したりします。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">除外設定</div>
+<h3>.gitignore</h3>
+<p>
+Git で管理しないファイルを指定するためのファイルです。
+</p>
+<div class="term-example">
+例: パスワードや不要な生成ファイルを除外します。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">保存</div>
+<h3>commit</h3>
+<p>
+変更内容を1つの記録として残すことです。
+</p>
+<div class="term-example">
+例: 機能を追加したら commit します。
+</div>
+</div>
+
+<div class="term-card">
+<div class="term-tag">送信</div>
+<h3>push</h3>
+<p>
+ローカルの変更を GitHub などのリモートへ送ることです。
+</p>
+<div class="term-example">
+例: <code>git push</code> で変更を共有します。
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="section">
+<h2>よく見る用語の対応表</h2>
+
+<pre><code class="language-text">
+handler          → URLごとの処理担当
+template         → HTMLのひな形
+FormValue        → フォームの値を取り出す
+ParseForm        → フォームを読み込む準備
+Exec             → テンプレートやSQLを実行する
+Query            → 複数行のデータを取得する
+Exec / Query     → SQLを実行するために使う
+multipart/form-data → ファイル送信の形式
+Redirect         → 処理後に別ページへ移動する
+</code></pre>
+</div>
+
+<div class="section">
+<h2>使い方のヒント</h2>
+
+<p>
+分からない単語が出てきたら、そのページだけを単独で覚えようとせず、
+<strong>「どのLessonで使ったか」</strong>
+と一緒に確認すると覚えやすくなります。
+</p>
+
+<div class="notice">
+用語集は、Lesson の内容を忘れたときに戻る場所として使うのがいちばん効果的です。
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+hljs.highlightAll();
+
+fetch("../sidebar.html")
+.then(res => res.text())
+.then(data => {
+document.getElementById("sidebar").innerHTML = data;
+});
+});
+</script>
+
+</body>
+</html>

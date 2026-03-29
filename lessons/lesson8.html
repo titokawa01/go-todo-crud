@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson8 GitHubと.gitignore</title>
+<title>Lesson8 Uploadの実装</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,134 +23,205 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-<h2>GitHubとは？</h2>
+<h2>このレッスンのゴール</h2>
 
 <p>
-GitHubは、コードを保存・共有・管理するためのサービスです。
+Lesson7 では、データベースに保存されたデータを読み出して一覧表示する Read を学びました。
 </p>
 
 <p>
-この研修では、ローカルで作業した内容をGitで記録し、GitHubへ送る流れを使います。
+Lesson8 では、フォームからファイルを受け取ってサーバーに保存する
+<strong>Upload</strong>
+の実装を学びます。
+</p>
+
+<p>
+ここを理解すると、テキストだけでなく画像や添付ファイルのような情報も扱えるようになります。
+</p>
+</div>
+
+<div class="section">
+<h2>Uploadとは？</h2>
+
+<p>
+Upload は、ブラウザから送られたファイルをサーバー側で受け取り、保存する処理です。
+</p>
+
+<p>
+たとえば、画像、PDF、添付ファイルなどを受け取るときに使います。
 </p>
 
 <div class="notice">
-GitHubに上げることで、変更履歴を残しながら開発を進められます。
+フォームの値を受け取るだけでなく、ファイルそのものを受け取るのが Upload です。
 </div>
 </div>
 
 <div class="section">
-<h2>よく使うコマンド</h2>
+<h2>Uploadの処理の流れ</h2>
 
-<p>
-まずは次の3つを覚えます。
-</p>
-
-<pre><code class="language-bash">
-git add .
-git commit -m "commit message"
-git push
+<pre><code class="language-text">
+ブラウザのフォーム
+↓
+Goのhandlerで受け取る
+↓
+multipart form として解析する
+↓
+ファイルを取り出す
+↓
+サーバー内に保存する
+↓
+一覧画面へ戻る
 </code></pre>
 
+<p>
+Upload は、Create と似ていますが、
+「文字列を保存する」のではなく「ファイルを保存する」という点が違います。
+</p>
+</div>
+
+<div class="section">
+<h2>フォーム側の書き方</h2>
+
+<p>
+ファイルを送るフォームでは、<code>enctype</code> を指定する必要があります。
+</p>
+
+<pre><code class="language-html">
+<form action="/upload" method="POST" enctype="multipart/form-data">
+	<input type="file" name="file">
+	<button type="submit">Upload</button>
+</form>
+</code></pre>
+
+<p>
+<code>enctype="multipart/form-data"</code> がないと、ファイルは正しく送れません。
+</p>
+
+<div class="notice">
+ファイルアップロードのときは、通常のフォーム送信とは少し書き方が変わります。
+</div>
+</div>
+
+<div class="section">
+<h2>Go側でファイルを受け取る</h2>
+
+<p>
+Go では、まず multipart form として解析します。
+</p>
+
+<pre><code class="language-go">
+func handler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		err := r.ParseMultipartForm(10 << 20)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		file, header, err := r.FormFile("file")
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		defer file.Close()
+
+		_ = header
+	}
+}
+</code></pre>
+
+<p>
+<code>r.FormFile("file")</code> で、フォームから送られたファイルを取り出せます。
+</p>
+
+<p>
+<code>header</code> にはファイル名などの情報が入っています。
+</p>
+</div>
+
+<div class="section">
+<h2>ファイルを保存する</h2>
+
+<p>
+受け取ったファイルは、サーバー内の保存先に書き込みます。
+</p>
+
+<pre><code class="language-go">
+dst, err := os.Create("./uploads/" + header.Filename)
+if err != nil {
+	log.Println(err)
+	return
+}
+defer dst.Close()
+
+_, err = io.Copy(dst, file)
+if err != nil {
+	log.Println(err)
+	return
+}
+</code></pre>
+
+<p>
+この処理で、ブラウザから送られたファイルが
+<code>uploads</code> フォルダに保存されます。
+</p>
+
 <ul>
-<li><code>git add .</code> : 変更をまとめる準備をする</li>
-<li><code>git commit</code> : 変更を記録する</li>
-<li><code>git push</code> : GitHubへ送る</li>
+<li><code>os.Create</code> → 保存先のファイルを作る</li>
+<li><code>io.Copy</code> → ファイルの中身をコピーする</li>
+<li><code>header.Filename</code> → 元のファイル名を使う</li>
+</ul>
+
+<div class="notice">
+保存先のフォルダは事前に作っておきます。
+ファイル名の重複には注意しましょう。
+</div>
+</div>
+
+<div class="section">
+<h2>保存後の流れ</h2>
+
+<p>
+ファイルの保存が終わったら、一覧画面へ戻すと使いやすくなります。
+</p>
+
+<pre><code class="language-go">
+http.Redirect(w, r, "/", http.StatusSeeOther)
+</code></pre>
+
+<p>
+これで、Upload 後にトップページへ戻れます。
+</p>
+</div>
+
+<div class="section">
+<h2>よくある確認ポイント</h2>
+
+<ul>
+<li><code>enctype="multipart/form-data"</code> が指定されているか</li>
+<li><code>r.ParseMultipartForm</code> を呼んでいるか</li>
+<li><code>r.FormFile("file")</code> の名前がフォームと一致しているか</li>
+<li>保存先のフォルダが存在しているか</li>
+<li>保存後に適切な画面へ戻しているか</li>
 </ul>
 </div>
 
 <div class="section">
-<h2>作業の流れ</h2>
+<h2>main.go で確認するポイント</h2>
 
 <p>
-実際の開発では、次の順番で作業します。
-</p>
-
-<pre><code class="language-text">
-コードを編集
-↓
-git status で確認
-↓
-git add .
-↓
-git commit -m "message"
-↓
-git push
-</code></pre>
-
-<p>
-pushする前に内容を確認する習慣をつけると、事故を防ぎやすくなります。
-</p>
-</div>
-
-<div class="section">
-<h2>.gitignoreとは？</h2>
-
-<p>
-.gitignore は「Gitに含めないファイル」を指定するファイルです。
-</p>
-
-<p>
-不要なファイルや機密情報を誤ってGitHubに上げないために使います。
-</p>
-
-<div class="notice">
-.gitignore を設定しておくと、公開してはいけない情報を守りやすくなります。
-</div>
-</div>
-
-<div class="section">
-<h2>よく除外するファイル</h2>
-
-<pre><code class="language-text">
-.env
-node_modules/
-.DS_Store
-</code></pre>
-
-<ul>
-<li><code>.env</code> → パスワードなどの情報</li>
-<li><code>node_modules/</code> → サイズが大きい</li>
-<li><code>.DS_Store</code> → Macの不要ファイル</li>
-</ul>
-</div>
-
-<div class="section">
-<h2>.gitignoreの書き方</h2>
-
-<p>
-プロジェクトのルートに <code>.gitignore</code> を作成します。
-</p>
-
-<pre><code class="language-bash">
-touch .gitignore
-</code></pre>
-
-<p>
-中身は次のように書きます。
-</p>
-
-<pre><code class="language-text">
-.env
-node_modules/
-.DS_Store
-</code></pre>
-</div>
-
-<div class="section">
-<h2>よくある事故</h2>
-
-<p>
-最初によく起きるミスを確認しておきます。
+main.go では、次の流れを探してみましょう。
 </p>
 
 <ul>
-<li>.env をGitHubにアップしてしまう</li>
-<li>node_modules を丸ごとpushする</li>
-<li>不要ファイルが増えてリポジトリが重くなる</li>
+<li>Upload 用のハンドラがあるか</li>
+<li><code>r.ParseMultipartForm</code> を使っているか</li>
+<li><code>r.FormFile</code> でファイルを取り出しているか</li>
+<li><code>os.Create</code> と <code>io.Copy</code> で保存しているか</li>
 </ul>
 
 <div class="notice">
-一度pushしたファイルは、あとから完全に消すのが大変なことがあります。
+Upload は、「フォームの受信」と「ファイル保存」の2つがそろって初めて完成します。
 </div>
 </div>
 
@@ -159,29 +230,30 @@ node_modules/
 
 <div class="exercise">
 <p>
-次のファイルのうち、.gitignore に入れるべきものはどれでしょうか？
+次のフォームで、ファイルを送るために必要な指定はどれでしょうか？
 </p>
 
-<ul>
-<li>.env</li>
-<li>main.go</li>
-<li>node_modules</li>
-<li>README.md</li>
-</ul>
-
-<p>
-理由も考えてみましょう。
-</p>
+<pre><code class="language-html">
+<form method="POST">
+	<input type="file" name="file">
+</form>
+</code></pre>
 </div>
 
 <div class="exercise">
 <p>
-次のコマンドは何をしているでしょうか？
+次のコードは何をしているでしょうか？
 </p>
 
-<pre><code class="language-bash">
-git status
+<pre><code class="language-go">
+file, header, err := r.FormFile("file")
 </code></pre>
+</div>
+
+<div class="exercise">
+<p>
+なぜ <code>os.Create</code> と <code>io.Copy</code> が必要なのでしょうか？
+</p>
 </div>
 </div>
 
@@ -189,11 +261,11 @@ git status
 <h2>次のLessonへ</h2>
 
 <p>
-Lesson8では、GitHubへの登録方法と、Gitに含めないファイルの管理を学びました。
+Lesson8では、ファイルを受け取ってサーバーに保存する流れを学びました。
 </p>
 
 <p>
-次のLesson9では、画面から送信されたデータを受け取る方法を学びます。
+次の Lesson9 では、データを削除する Delete の実装を学びます。
 </p>
 </div>
 

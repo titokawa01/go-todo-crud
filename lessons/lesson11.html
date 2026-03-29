@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson11 研修の総まとめ</title>
+<title>Lesson11 送信データの受け取り</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,110 +23,230 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-<h2>研修のゴール</h2>
+<h2>このレッスンのゴール</h2>
 
 <p>
-この研修のゴールは、GoでCRUDアプリを完成させ、GitHubへ公開できるようになることです。
+Lesson10 では、HTTPメソッド（GET / POST / PUT / DELETE）によって処理を分ける考え方を学びました。
+</p>
+
+<p>
+Lesson11 では、実際にフォームから送られてきたデータを
+<strong>Go で受け取る方法</strong>
+を学びます。
+</p>
+
+<p>
+ここを理解すると、Create や Upload の実装で必要になる
+「画面からの入力を取り出す処理」が見えるようになります。
+</p>
+</div>
+
+<div class="section">
+<h2>画面から送信されたデータを受け取る</h2>
+
+<p>
+Webアプリでは、フォームから送られた値を Go サーバー側で受け取ることができます。
+</p>
+
+<p>
+この Lesson では、ブラウザから送信されたデータを読み取る基本を学びます。
 </p>
 
 <div class="notice">
-ここまで学んだ内容をつなげると、ひとつのWebアプリとして動かせるようになります。
+ここで受け取った値は、次の Lesson 以降で DB 保存やファイル保存につなげていきます。
 </div>
 </div>
 
 <div class="section">
-<h2>ここまで学んだこと</h2>
-
-<ul>
-<li>GoでWebサーバーを起動する</li>
-<li>HTTPハンドラでURLごとの処理を分ける</li>
-<li>テンプレートで画面を表示する</li>
-<li>MySQLへ接続する</li>
-<li>Createでデータを保存する</li>
-<li>Readでデータを一覧表示する</li>
-<li>GitHubでコードを管理する</li>
-<li>.gitignoreで不要ファイルを除外する</li>
-</ul>
-</div>
-
-<div class="section">
-<h2>CRUDアプリの完成イメージ</h2>
+<h2>フォーム送信の流れ</h2>
 
 <pre><code class="language-text">
 ブラウザのフォーム
 ↓
-Go Handler
+HTTP POSTで送信
 ↓
-Create / Read / Update / Delete
+Goのhandlerで受け取る
 ↓
-MySQL Database
+送信された値を取り出す
 ↓
-HTML Template
-↓
-ブラウザに表示
+画面表示やDB保存につなげる
 </code></pre>
 
 <p>
-この流れを自分で説明できるようになることが、とても大切です。
+データを受け取る処理が分かると、Create の実装に進みやすくなります。
 </p>
 </div>
 
 <div class="section">
-<h2>実務での流れ</h2>
+<h2>まずはメソッドを確認する</h2>
 
 <p>
-実際の開発では、次の順番で進めることが多いです。
+Lesson10 で学んだように、送られてきたリクエストは
+<code>r.Method</code> で確認できます。
 </p>
+
+<pre><code class="language-go">
+func handler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		// フォーム送信の処理
+	}
+}
+</code></pre>
+
+<p>
+フォーム送信のときは、まず POST かどうかを確認します。
+</p>
+
+<div class="notice">
+同じ handler でも、GET と POST で処理を分けると分かりやすくなります。
+</div>
+</div>
+
+<div class="section">
+<h2>値を受け取る</h2>
+
+<p>
+Go では、リクエストからフォームの値を取り出せます。
+</p>
+
+<pre><code class="language-go">
+func handler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	content := r.FormValue("content")
+	fmt.Fprintln(w, content)
+}
+</code></pre>
+
+<p>
+この例では、<code>content</code> という名前の入力欄から値を受け取っています。
+</p>
+
+<p>
+<code>r.ParseForm()</code> を呼んでから <code>FormValue</code> を使うと、
+フォームの値を取り出しやすくなります。
+</p>
+</div>
+
+<div class="section">
+<h2>HTMLフォームの例</h2>
+
+<p>
+ブラウザ側では、次のようなフォームを使います。
+</p>
+
+<pre><code class="language-html">
+<form method="post" action="/tasks">
+  <input type="text" name="content">
+  <button type="submit">送信</button>
+</form>
+</code></pre>
+
+<ul>
+<li><code>method="post"</code> → データを送る</li>
+<li><code>name="content"</code> → Go側で受け取る名前</li>
+<li><code>action="/tasks"</code> → 送信先URL</li>
+</ul>
+
+<div class="notice">
+HTMLの <code>name</code> 属性と、Goの <code>FormValue</code> の名前を一致させます。
+</div>
+</div>
+
+<div class="section">
+<h2>よく使う考え方</h2>
+
+<p>
+フォーム送信では、HTML と Go の名前をそろえることが大切です。
+</p>
+
+<p>
+入力欄の <code>name</code> が <code>content</code> なら、Go 側でも <code>FormValue("content")</code> と書きます。
+</p>
+
+<p>
+この対応がずれると、値を受け取れなくなるので注意しましょう。
+</p>
+</div>
+
+<div class="section">
+<h2>処理の流れ</h2>
 
 <pre><code class="language-text">
-機能を追加する
+フォームの入力
 ↓
-動作確認する
+POSTで送信
 ↓
-git status で確認する
+handlerで受け取る
 ↓
-git add / commit
+ParseForm
 ↓
-git push
+FormValueで値を取り出す
 ↓
-GitHubで履歴を残す
+次の処理へつなげる
 </code></pre>
 
-<div class="notice">
-作ることと、記録することをセットで進めるのが大切です。
-</div>
+<p>
+この流れを理解しておくと、Create や Upload の実装がかなり読みやすくなります。
+</p>
 </div>
 
 <div class="section">
-<h2>最後の確認</h2>
+<h2>main.go で確認するポイント</h2>
 
 <p>
-次の質問に答えられれば、かなり理解が進んでいます。
+main.go では、次の点を探してみましょう。
 </p>
 
-<div class="exercise">
 <ul>
-<li>handlerは何をする？</li>
-<li>template.Executeは何をする？</li>
-<li>INSERTとSELECTの違いは？</li>
-<li>なぜ .gitignore が必要？</li>
-<li>GitHubへpushする意味は？</li>
+<li><code>r.Method == http.MethodPost</code> で POST を確認しているか</li>
+<li><code>r.ParseForm()</code> を呼んでいるか</li>
+<li><code>r.FormValue("content")</code> で値を取り出しているか</li>
+<li>HTML の <code>name</code> と Go の <code>FormValue</code> が一致しているか</li>
 </ul>
+
+<div class="notice">
+まずは「送る側」と「受け取る側」の名前を合わせることが大切です。
 </div>
 </div>
 
 <div class="section">
-<h2>次のステップ</h2>
+<h2>演習</h2>
 
-<ul>
-<li>Lessonごとにコードを少しずつ改良する</li>
-<li>完成したCRUDアプリをGitHub PagesやGitHubで公開する</li>
-<li>必要に応じてAWSなどの公開先へ進む</li>
-</ul>
+<div class="exercise">
+<p>
+次のコードは何をしているでしょうか？
+</p>
 
-<div class="notice">
-ここまで来たら、あとは作りながら覚えていく段階です。
+<pre><code class="language-go">
+r.ParseForm()
+content := r.FormValue("content")
+</code></pre>
 </div>
+
+<div class="exercise">
+<p>
+HTMLフォームの <code>name="content"</code> は、Go側のどの処理と対応しているでしょうか？
+</p>
+</div>
+
+<div class="exercise">
+<p>
+なぜ <code>r.Method == http.MethodPost</code> を確認するとよいのでしょうか？
+</p>
+</div>
+</div>
+
+<div class="section">
+<h2>次のLessonへ</h2>
+
+<p>
+Lesson11では、画面から送信されたデータを受け取る方法を学びました。
+</p>
+
+<p>
+次の Lesson12 では、研修の総まとめとして、
+ここまで学んだ内容をひとつの流れに整理します。
+</p>
 </div>
 
 </div>

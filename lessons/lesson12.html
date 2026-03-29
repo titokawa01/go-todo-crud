@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="UTF-8">
+<title>Lesson12 研修の総まとめ</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+<div class="section">
+<h2>このレッスンのゴール</h2>
+
+<p>
+この研修のゴールは、GoでCRUDアプリを作る流れを理解し、
+自分で少しずつ改良できるようになることです。
+</p>
+
+<p>
+ここまでで、Goの環境構築から始まり、HTTPハンドラ、テンプレート、DB接続、
+Create / Read / Upload / Delete、REST API、フォーム送信の受け取りまで学んできました。
+</p>
+
+<div class="notice">
+このレッスンでは、個別の知識をもう一度つなげて、
+「ひとつのWebアプリとしてどう動くか」を整理します。
+</div>
+</div>
+
+<div class="section">
+<h2>ここまで学んだこと</h2>
+
+<ul>
+<li>Go をインストールして最初のプロジェクトを作る</li>
+<li>HTTPハンドラでURLごとの処理を分ける</li>
+<li>HTMLテンプレートで画面を表示する</li>
+<li>MySQLへ接続する</li>
+<li>REST API と HTTPメソッドの関係を知る</li>
+<li>フォームから送信されたデータを受け取る</li>
+<li>Create でデータを保存する</li>
+<li>Read でデータを一覧表示する</li>
+<li>Upload でファイルを保存する</li>
+<li>Delete でデータを削除する</li>
+<li>GitHub でコードを管理する</li>
+<li>.gitignore で不要ファイルを除外する</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>CRUDアプリの完成イメージ</h2>
+
+<pre><code class="language-text">
+ブラウザのフォーム
+↓
+Go Handler
+↓
+HTTPメソッドで処理を分ける
+↓
+Create / Read / Upload / Delete
+↓
+MySQL Database / ファイル保存
+↓
+HTML Template
+↓
+ブラウザに表示
+</code></pre>
+
+<p>
+この流れを自分の言葉で説明できるようになると、
+Webアプリの全体像がかなり見えてきます。
+</p>
+</div>
+
+<div class="section">
+<h2>処理のつながりを振り返る</h2>
+
+<p>
+それぞれのレッスンは、単体で完結しているように見えて、実はつながっています。
+</p>
+
+<ul>
+<li><strong>ハンドラ</strong> がリクエストを受け取る</li>
+<li><strong>HTTPメソッド</strong> で処理を分ける</li>
+<li><strong>フォーム送信</strong> から値を取り出す</li>
+<li><strong>DB</strong> に保存したり、取り出したりする</li>
+<li><strong>テンプレート</strong> で画面に表示する</li>
+<li><strong>Upload / Delete</strong> でデータの扱いを広げる</li>
+</ul>
+
+<div class="notice">
+大事なのは、ひとつひとつの関数を暗記することではなく、
+「入力 → 処理 → 保存 → 表示」の流れを理解することです。
+</div>
+</div>
+
+<div class="section">
+<h2>実務での流れ</h2>
+
+<p>
+実際の開発では、次のような順番で進めることが多いです。
+</p>
+
+<pre><code class="language-text">
+機能を追加する
+↓
+動作確認する
+↓
+git status で確認する
+↓
+git add / commit
+↓
+git push
+↓
+GitHub で履歴を残す
+</code></pre>
+
+<p>
+作ることと、記録することをセットで進めるのが大切です。
+</p>
+</div>
+
+<div class="section">
+<h2>最後の確認</h2>
+
+<p>
+次の質問に答えられれば、かなり理解が進んでいます。
+</p>
+
+<div class="exercise">
+<ul>
+<li>handler は何をする？</li>
+<li>template.Execute は何をする？</li>
+<li>INSERT と SELECT の違いは？</li>
+<li>なぜ .gitignore が必要？</li>
+<li>GET と POST の違いは？</li>
+<li>Delete ではなぜ ID を使う？</li>
+<li>Upload ではなぜ multipart/form-data が必要？</li>
+</ul>
+</div>
+</div>
+
+<div class="section">
+<h2>次のステップ</h2>
+
+<ul>
+<li>Lesson ごとにコードを少しずつ改良する</li>
+<li>エラー処理を丁寧に書き直す</li>
+<li>一覧画面やボタンの見た目を整える</li>
+<li>必要なら検索や編集機能を追加する</li>
+<li>完成した CRUD アプリを GitHub で公開する</li>
+</ul>
+
+<div class="notice">
+ここまで来たら、あとは作りながら覚えていく段階です。
+</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+hljs.highlightAll();
+
+fetch("../sidebar.html")
+.then(res => res.text())
+.then(data => {
+document.getElementById("sidebar").innerHTML = data;
+});
+});
+</script>
+
+</body>
+</html>

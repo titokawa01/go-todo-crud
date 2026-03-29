@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson6 REST API</title>
+<title>Lesson6 Createの実装</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,86 +23,35 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-<h2>REST APIとは</h2>
+<h2>このレッスンのゴール</h2>
 
 <p>
-REST APIは、HTTPの仕組みを使ってデータをやり取りする設計の考え方です。
+Lesson5 では、CRUD の全体像を整理しました。
 </p>
 
 <p>
-ブラウザやフロントエンドから、サーバーに対して「取得・作成・更新・削除」を行います。
+Lesson6 では、その中の <strong>Create</strong> を実装します。
+</p>
+
+<p>
+ここでは、フォームから受け取った値をデータベースに保存し、
+保存後に一覧画面へ戻る流れを学びます。
+</p>
+</div>
+
+<div class="section">
+<h2>Createとは？</h2>
+
+<p>
+Create は、フォームから送られたデータをデータベースに保存する処理です。
+</p>
+
+<p>
+この Lesson では、画面から受け取った値を DB へ登録する流れを学びます。
 </p>
 
 <div class="notice">
-このLessonでは、HTTPメソッドごとに処理を分ける考え方を学びます。
-</div>
-</div>
-
-<div class="section">
-<h2>HTTPメソッド</h2>
-
-<p>
-RESTでは、HTTPメソッドを使って操作の種類を表します。
-</p>
-
-<ul>
-<li>GET：取得</li>
-<li>POST：作成</li>
-<li>PUT：更新</li>
-<li>DELETE：削除</li>
-</ul>
-
-<pre><code class="language-text">
-GET    → 読む
-POST   → 追加する
-PUT    → 変更する
-DELETE → 消す
-</code></pre>
-</div>
-
-<div class="section">
-<h2>Goでの分岐</h2>
-
-<p>
-Goでは、リクエストのメソッドを見て処理を分けます。
-</p>
-
-<pre><code class="language-go">
-switch r.Method {
-case http.MethodGet:
-	// 一覧取得
-case http.MethodPost:
-	// 新規作成
-case http.MethodPut:
-	// 更新
-case http.MethodDelete:
-	// 削除
-default:
-	// 対応していないメソッド
-}
-</code></pre>
-
-<p>
-この分岐によって、1つのURLでも複数の操作を扱えるようになります。
-</p>
-</div>
-
-<div class="section">
-<h2>なぜ分けるのか</h2>
-
-<p>
-同じURLでも、操作の種類によって処理は変わります。
-</p>
-
-<ul>
-<li>GETなら一覧を返す</li>
-<li>POSTなら新しいデータを保存する</li>
-<li>PUTなら既存データを更新する</li>
-<li>DELETEならデータを削除する</li>
-</ul>
-
-<div class="notice">
-URLとHTTPメソッドを組み合わせることで、APIの役割が分かりやすくなります。
+ここで「受け取る」と「保存する」がつながります。
 </div>
 </div>
 
@@ -110,49 +59,154 @@ URLとHTTPメソッドを組み合わせることで、APIの役割が分かり�
 <h2>処理の流れ</h2>
 
 <pre><code class="language-text">
-ブラウザ / フロントエンド
- ↓
-HTTPリクエスト送信
- ↓
-Goサーバー
- ↓
-r.Method で分岐
- ↓
-GET / POST / PUT / DELETE に応じた処理
- ↓
-レスポンスを返す
+ブラウザのフォーム
+↓
+Goのhandlerで受け取る
+↓
+入力値を取り出す
+↓
+INSERTでDBに保存する
+↓
+一覧画面へ戻る
 </code></pre>
 
 <p>
-この流れが分かると、CRUDアプリの画面とサーバー処理をつなげやすくなります。
+Create は、CRUD アプリの最初の完成ポイントです。
 </p>
+</div>
+
+<div class="section">
+<h2>フォームの値を受け取る</h2>
+
+<p>
+フォームから送られた値は <code>FormValue</code> で取り出せます。
+</p>
+
+<pre><code class="language-go">
+func handler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		content := r.FormValue("content")
+		_ = content
+	}
+}
+</code></pre>
+
+<p>
+ここで取り出した値を、そのまま DB 保存に使います。
+</p>
+
+<p>
+まずは「フォームから値を読む」という流れを理解することが大切です。
+</p>
+</div>
+
+<div class="section">
+<h2>INSERTで保存する</h2>
+
+<p>
+データを保存するときは、SQL の <code>INSERT</code> を使います。
+</p>
+
+<pre><code class="language-go">
+_, err := db.Exec(
+	"INSERT INTO tasks (content) VALUES (?)",
+	content,
+)
+</code></pre>
+
+<p>
+このコードは、tasks テーブルに新しいデータを追加します。
+</p>
+
+<ul>
+<li><code>db.Exec</code> → SQLを実行する</li>
+<li><code>INSERT INTO</code> → データを追加する</li>
+<li><code>?</code> → 安全に値を渡すためのプレースホルダ</li>
+</ul>
+
+<div class="notice">
+文字列を直接つなぐのではなく、プレースホルダを使うのが基本です。
+</div>
+</div>
+
+<div class="section">
+<h2>保存後の流れ</h2>
+
+<p>
+保存できたら、一覧画面へ戻すと使いやすくなります。
+</p>
+
+<pre><code class="language-go">
+http.Redirect(w, r, "/", http.StatusSeeOther)
+</code></pre>
+
+<p>
+これは、保存後にトップページへ移動する処理です。
+</p>
+
+<p>
+保存が終わったあとに画面を戻すことで、再読み込みによる二重送信を避けやすくなります。
+</p>
+</div>
+
+<div class="section">
+<h2>よくある確認ポイント</h2>
+
+<ul>
+<li>フォームの <code>name</code> と <code>FormValue</code> が一致しているか</li>
+<li>SQL文のテーブル名とカラム名が正しいか</li>
+<li>DB接続が成功しているか</li>
+<li>保存後の遷移先が正しいか</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>main.go で確認するポイント</h2>
+
+<p>
+main.go では、次の流れを探してみましょう。
+</p>
+
+<ul>
+<li><code>r.Method == http.MethodPost</code> で POST を判定している部分</li>
+<li><code>r.FormValue("content")</code> で値を取り出している部分</li>
+<li><code>db.Exec</code> で INSERT している部分</li>
+<li><code>http.Redirect</code> で画面を戻している部分</li>
+</ul>
+
+<div class="notice">
+Create の処理は、フォーム送信から保存、画面遷移までがひとまとまりです。
+</div>
 </div>
 
 <div class="section">
 <h2>演習</h2>
 
 <div class="exercise">
-<p>次のHTTPメソッドが何を表すか答えてみましょう。</p>
+<p>
+次のコードは何をしているでしょうか？
+</p>
 
-<ul>
-<li>GET</li>
-<li>POST</li>
-<li>PUT</li>
-<li>DELETE</li>
-</ul>
+<pre><code class="language-go">
+content := r.FormValue("content")
+</code></pre>
 </div>
 
 <div class="exercise">
-<p>次のコードは何をしているでしょうか？</p>
+<p>
+次のSQLは何をしているでしょうか？
+</p>
 
 <pre><code class="language-go">
-switch r.Method {
-case http.MethodPost:
-case http.MethodPut:
-case http.MethodDelete:
-case http.MethodGet:
-}
+INSERT INTO tasks (content) VALUES (?)
 </code></pre>
+</div>
+
+<div class="exercise">
+<p>
+保存後に <code>redirect</code> するのはなぜでしょうか？
+</p>
 </div>
 </div>
 
@@ -160,27 +214,28 @@ case http.MethodGet:
 <h2>次のLessonへ</h2>
 
 <p>
-Lesson6では、HTTPメソッドごとに処理を分ける考え方を学びました。
+Lesson6では、画面から受け取ったデータを DB へ保存する流れを学びました。
 </p>
 
 <p>
-次のLesson7では、これを実際の画面や画面遷移と結びつけていきます。
+次の Lesson7 では、保存したデータを一覧で表示する Read 処理を学びます。
 </p>
 </div>
 
 </div>
+
 </div>
 
 <script>
-
+document.addEventListener("DOMContentLoaded", function () {
 hljs.highlightAll();
 
 fetch("../sidebar.html")
 .then(res => res.text())
 .then(data => {
-document.getElementById("sidebar").innerHTML = data
-})
-
+document.getElementById("sidebar").innerHTML = data;
+});
+});
 </script>
 
 </body>

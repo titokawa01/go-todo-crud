@@ -23,6 +23,24 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
+<h2>このレッスンのゴール</h2>
+
+<p>
+Lesson1 では、Go のインストールと最初のプロジェクト作成、そして
+この研修で作るアプリの全体像を確認しました。
+</p>
+
+<p>
+Lesson2 では、ブラウザからのアクセスを受け取って処理を振り分ける
+<strong>HTTPハンドラ</strong> を学びます。
+</p>
+
+<p>
+ここを理解すると、「URLにアクセスしたら、Go のどの処理が動くのか」が見えるようになります。
+</p>
+</div>
+
+<div class="section">
 <h2>HTTPハンドラとは？</h2>
 
 <p>
@@ -30,12 +48,19 @@ Webアプリでは、ブラウザがURLにアクセスすると、Goサーバー
 </p>
 
 <p>
-そのリクエストに対して、どの処理を実行するかを決めるのが <strong>HTTPハンドラ</strong> です。
+そのときに「このURLなら、この処理を実行する」と決めるのが
+<strong>HTTPハンドラ</strong> です。
 </p>
 
 <p>
-つまり、ハンドラは「URLごとの受付担当」のような役割を持ちます。
+つまり、ハンドラは
+<strong>URLごとの受付担当</strong>
+のような役割を持ちます。
 </p>
+
+<div class="notice">
+URL と処理を結びつけるのが、Webアプリの基本です。
+</div>
 </div>
 
 <div class="section">
@@ -58,6 +83,11 @@ http.HandleFunc("/", handler)
 <li><code>handler</code> 関数を実行する</li>
 </ul>
 
+<p>
+たとえば、トップページにアクセスしたときだけ専用の処理を返したい場合、
+このように URL ごとに処理を分けます。
+</p>
+
 <div class="notice">
 <code>http.HandleFunc</code> は「どのURLに、どの処理を呼ぶか」を登録する仕組みです。
 </div>
@@ -67,7 +97,7 @@ http.HandleFunc("/", handler)
 <h2>Handler関数の書き方</h2>
 
 <p>
-handler関数は、HTTPリクエストを受け取ってレスポンスを返します。
+handler関数は、HTTPリクエストを受け取り、レスポンスを返します。
 </p>
 
 <pre><code class="language-go">
@@ -88,6 +118,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 <li><code>w</code> はレスポンスを書き込むためのもの</li>
 <li><code>r</code> はブラウザから送られてきたリクエスト情報</li>
 </ul>
+
+<p>
+まずは「受け取るもの」と「返すもの」が別になっている、と覚えれば十分です。
+</p>
 </div>
 
 <div class="section">
@@ -111,6 +145,10 @@ HTTP Response
 
 <p>
 ブラウザからのアクセスを受け、Goサーバーが適切なハンドラを呼び出し、結果を返します。
+</p>
+
+<p>
+この流れを理解できると、次のレッスンで扱うテンプレートやデータの受け渡しも読みやすくなります。
 </p>
 </div>
 
@@ -173,7 +211,8 @@ Lesson2では、URLと処理をつなぐ考え方を学びました。
 </p>
 
 <p>
-次のLesson3では、画面表示を整理するためにテンプレートを使っていきます。
+次のLesson3では、画面表示を整理するために
+HTMLテンプレートを使っていきます。
 </p>
 </div>
 

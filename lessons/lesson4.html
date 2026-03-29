@@ -23,25 +23,66 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
+<h2>このレッスンのゴール</h2>
+
+<p>
+Lesson3 では、HTMLテンプレートを使って画面を表示する方法を学びました。
+</p>
+
+<p>
+Lesson4 では、アプリのデータを保存するために必要な
+<strong>データベース接続</strong>
+を学びます。
+</p>
+
+<p>
+ここを理解すると、ブラウザから受け取ったデータを保存したり、
+保存済みのデータを取り出したりする準備が整います。
+</p>
+</div>
+
+<div class="section">
 <h2>データベースとは？</h2>
 
 <p>
-Webアプリでは、データを保存するためにデータベースを使用します。
+Webアプリでは、データを保存するためにデータベースを使います。
 </p>
 
 <p>
-例えばToDoアプリでは、以下のようなデータを保存します。
+たとえば ToDo アプリでは、次のような情報を保存します。
 </p>
 
 <ul>
-<li>タスク内容</li>
+<li>タスクの内容</li>
 <li>作成日時</li>
-<li>完了状態</li>
+<li>完了したかどうか</li>
 </ul>
 
 <div class="notice">
-アプリは「データを保存できる」ことで初めて実用的になります
+アプリは「データを保存できる」ことで、初めて実用的になります。
 </div>
+</div>
+
+<div class="section">
+<h2>まずはDB接続の全体像をつかむ</h2>
+
+<p>
+Go では <code>database/sql</code> パッケージを使ってデータベースを扱います。
+</p>
+
+<p>
+このレッスンでは、まず次の2つを押さえます。
+</p>
+
+<ul>
+<li><code>sql.Open</code> で接続の準備をする</li>
+<li><code>db.Ping()</code> で実際に接続できるか確認する</li>
+</ul>
+
+<p>
+最初から細かく覚える必要はありません。
+「接続の準備」と「接続確認」が別になっている、と分かれば十分です。
+</p>
 </div>
 
 <div class="section">
@@ -52,13 +93,17 @@ Goでは <code>database/sql</code> パッケージを使ってDBに接続しま�
 </p>
 
 <pre><code class="language-go">
-db, err := sql.Open("mysql",
-"root:9999@tcp(localhost:3306)/mermaid")
+db, err := sql.Open("mysql", "root:9999@tcp(localhost:3306)/mermaid")
 </code></pre>
 
 <p>
-この文字列は「接続情報」を表しています。
+この文字列は、データベースへの接続情報を表しています。
 </p>
+
+<div class="notice">
+接続情報は <code>.env</code> ファイルで管理するのが一般的です。
+コードの中にパスワードを直書きしないようにしましょう。
+</div>
 </div>
 
 <div class="section">
@@ -69,34 +114,65 @@ db, err := sql.Open("mysql",
 </code></pre>
 
 <ul>
-<li>root → ユーザー名</li>
-<li>9999 → パスワード</li>
-<li>localhost → DBサーバーの場所</li>
-<li>3306 → ポート番号</li>
-<li>mermaid → データベース名</li>
+<li><code>root</code> → ユーザー名</li>
+<li><code>9999</code> → パスワード</li>
+<li><code>localhost</code> → DBサーバーの場所</li>
+<li><code>3306</code> → ポート番号</li>
+<li><code>mermaid</code> → データベース名</li>
 </ul>
 
-<div class="notice">
-接続情報は.envファイルで管理するのが一般的です
-</div>
+<p>
+この形を見慣れておくと、あとで環境を変えても読み取りやすくなります。
+</p>
 </div>
 
 <div class="section">
-<h2>DB接続確認（Ping）</h2>
+<h2>接続できたかを確認する</h2>
 
 <p>
-接続できたかどうかは <code>Ping()</code> で確認します。
+<code>sql.Open</code> は「接続のための準備」をします。
+実際にDBへつながるかは、<code>db.Ping()</code> で確認します。
 </p>
 
 <pre><code class="language-go">
 err = db.Ping()
 if err != nil {
-    log.Fatal(err)
+	log.Println(err)
+	return
 }
 </code></pre>
 
 <p>
-エラーが出る場合は、接続情報やMySQLの起動状態を確認します。
+エラーが出る場合は、次のような点を確認します。
+</p>
+
+<ul>
+<li>MySQL が起動しているか</li>
+<li>ユーザー名とパスワードが合っているか</li>
+<li>ホスト名とポート番号が正しいか</li>
+<li>データベース名が存在しているか</li>
+</ul>
+
+<div class="notice">
+このレッスンでは、まず <code>log.Println(err)</code> で内容を見て、
+何が起きているかを落ち着いて確認する習慣をつけます。
+</div>
+</div>
+
+<div class="section">
+<h2>なぜ Ping が必要なのか</h2>
+
+<p>
+<code>sql.Open</code> が成功しても、まだ「本当にDBへつながるか」は確定していません。
+</p>
+
+<p>
+そのため、<code>db.Ping()</code> を使って実際の接続状態を確認します。
+</p>
+
+<p>
+この考え方は、Webアプリのトラブルシュートでも大切です。
+「準備ができた」ことと「実際に使える」ことは別だと覚えておきましょう。
 </p>
 </div>
 
@@ -106,23 +182,43 @@ if err != nil {
 <pre><code class="language-text">
 Goアプリ起動
  ↓
-DB接続（sql.Open）
+DB接続の準備（sql.Open）
  ↓
-接続確認（Ping）
+接続確認（db.Ping）
  ↓
-クエリ実行（次のLesson）
+接続できれば次の処理へ
+ ↓
+SQL実行（次のLesson）
 </code></pre>
 
 <p>
-DB接続はアプリの「土台」となる処理です。
+DB接続は、アプリの土台になる処理です。
+ここが見えると、あとで Create / Read / Update / Delete を扱うときに理解しやすくなります。
 </p>
+</div>
+
+<div class="section">
+<h2>main.go で確認するポイント</h2>
+
+<p>
+main.go では、次の3つを探してみましょう。
+</p>
+
+<ul>
+<li><code>sql.Open</code> でDB接続の準備をしている部分</li>
+<li><code>db.Ping()</code> で接続確認している部分</li>
+<li><code>log.Println(err)</code> でエラーを記録している部分</li>
+</ul>
+
+<div class="notice">
+この3つが見つかると、GoでDBを扱う最初の流れが見えます。
+</div>
 </div>
 
 <div class="section">
 <h2>演習</h2>
 
 <div class="exercise">
-
 <pre><code class="language-go">
 db, err := sql.Open("mysql", "????")
 </code></pre>
@@ -138,28 +234,31 @@ db, err := sql.Open("mysql", "????")
 <li>ポート</li>
 <li>データベース名</li>
 </ul>
-
 </div>
 
 <div class="exercise">
-
 <p>
-なぜ接続確認（Ping）が必要なのでしょうか？
+なぜ <code>db.Ping()</code> で接続確認をするのでしょうか？
 </p>
-
 </div>
 
+<div class="exercise">
+<p>
+エラーが出たとき、なぜ <code>log.Println(err)</code> で内容を確認するとよいのでしょうか？
+</p>
+</div>
 </div>
 
 <div class="section">
 <h2>次のLessonへ</h2>
 
 <p>
-Lesson4ではデータベースへの接続を学びました。
+Lesson4では、データベースへの接続を学びました。
 </p>
 
 <p>
-次のLesson5では、実際にデータを保存（Create）していきます。
+次のLesson5では、CRUD の全体像を整理しながら、
+まずは Create と Read を学んでいきます。
 </p>
 </div>
 

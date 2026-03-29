@@ -23,6 +23,24 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
+<h2>このレッスンのゴール</h2>
+
+<p>
+Lesson2 では、URL と処理を <code>http.HandleFunc</code> で結びつける考え方を学びました。
+</p>
+
+<p>
+Lesson3 では、Go の Webアプリで画面を表示するときに使う
+<strong>HTMLテンプレート</strong>
+を学びます。
+</p>
+
+<p>
+ここを理解すると、画面の見た目と Go の処理を分けて考えられるようになります。
+</p>
+</div>
+
+<div class="section">
 <h2>HTMLテンプレートとは？</h2>
 
 <p>
@@ -55,6 +73,10 @@ GoのWebアプリでは、HTMLテンプレートを使って画面を表示し�
 <li>データ表示を整理しやすい</li>
 <li>ページの共通化がしやすい</li>
 </ul>
+
+<p>
+初心者のうちは、まず「HTMLを別ファイルに分けて管理する」と考えると分かりやすいです。
+</p>
 </div>
 
 <div class="section">
@@ -73,14 +95,24 @@ tmpl, err := template.ParseFiles("templates/index.html")
 </p>
 
 <p>
-エラーが返ることもあるので、読み込みに失敗したら確認できるようにしておきます。
+読み込みに失敗することもあるので、エラーが出たら内容を確認できるようにしておきます。
 </p>
 
 <pre><code class="language-go">
 if err != nil {
-	log.Fatal(err)
+	log.Println(err)
+	return
 }
 </code></pre>
+
+<p>
+この段階では、エラーが起きたことを記録して処理を止める、という考え方を身につけます。
+</p>
+
+<div class="notice">
+この研修では、まず <code>log.Println(err)</code> で内容を確認できるようにし、
+そのあとで必要に応じて処理の止め方を整理していきます。
+</div>
 </div>
 
 <div class="section">
@@ -110,6 +142,10 @@ data := PageData{
 
 <p>
 テンプレート内では、<code>{{.Title}}</code> や <code>{{.Name}}</code> のように書いて表示します。
+</p>
+
+<p>
+この書き方を使うと、画面ごとに中身だけを変えながら、同じひな形を再利用できます。
 </p>
 </div>
 
@@ -158,6 +194,24 @@ Browserに表示
 </div>
 
 <div class="section">
+<h2>main.go で確認するポイント</h2>
+
+<p>
+main.go では、次の3つを探してみましょう。
+</p>
+
+<ul>
+<li><code>template.ParseFiles</code> でHTMLを読み込んでいる部分</li>
+<li><code>log.Println(err)</code> でエラーを記録している部分</li>
+<li><code>tmpl.Execute(w, data)</code> で画面に出力している部分</li>
+</ul>
+
+<div class="notice">
+この3つがそろうと、Goでテンプレートを扱う流れが見えやすくなります。
+</div>
+</div>
+
+<div class="section">
 <h2>演習</h2>
 
 <p>
@@ -187,6 +241,19 @@ tmpl, err := template.ParseFiles("templates/index.html")
 
 <p>
 このコードは何を読み込んでいるでしょうか？
+</p>
+</div>
+
+<div class="exercise">
+<pre><code class="language-go">
+if err != nil {
+	log.Println(err)
+	return
+}
+</code></pre>
+
+<p>
+この書き方にすると、何がしやすくなるでしょうか？
 </p>
 </div>
 </div>

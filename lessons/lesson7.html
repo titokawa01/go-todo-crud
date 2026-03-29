@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Lesson7 送信データの受け取り</title>
+<title>Lesson7 Readの実装</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -23,91 +23,157 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
-<h2>画面から送信されたデータを受け取る</h2>
+<h2>このレッスンのゴール</h2>
 
 <p>
-Webアプリでは、フォームから送られた値をGoサーバー側で受け取ることができます。
+Lesson6 では、フォームから受け取ったデータを DB に保存する Create を学びました。
 </p>
 
 <p>
-このLessonでは、ブラウザから送信されたデータを読み取る基本を学びます。
+Lesson7 では、その保存したデータを取り出して一覧表示する <strong>Read</strong> を学びます。
+</p>
+
+<p>
+ここを理解すると、アプリに保存された情報をブラウザで確認できるようになります。
+</p>
+</div>
+
+<div class="section">
+<h2>Readとは？</h2>
+
+<p>
+Read は、データベースに保存された情報を取り出して表示する処理です。
+</p>
+
+<p>
+CRUD の中でも、まず一番見える形で動かしやすいのが Read です。
 </p>
 
 <div class="notice">
-ここで受け取った値は、次のLesson以降でDB保存につなげていきます。
+保存したデータを一覧で確認できると、アプリらしさが一気に出ます。
 </div>
 </div>
 
 <div class="section">
-<h2>フォーム送信の流れ</h2>
-
-<pre><code class="language-text">
-ブラウザのフォーム
-↓
-HTTP POSTで送信
-↓
-Goのhandlerで受け取る
-↓
-送信された値を取り出す
-↓
-画面表示やDB保存につなげる
-</code></pre>
+<h2>SELECTで取得する</h2>
 
 <p>
-データを受け取る処理が分かると、Createの実装に進みやすくなります。
-</p>
-</div>
-
-<div class="section">
-<h2>値を受け取る</h2>
-
-<p>
-Goでは、リクエストからフォームの値を取り出せます。
+DB からデータを取り出すときは <code>SELECT</code> を使います。
 </p>
 
 <pre><code class="language-go">
-func handler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	content := r.FormValue("content")
-	fmt.Fprintln(w, content)
-}
+rows, err := db.Query("SELECT id, content FROM tasks")
 </code></pre>
 
 <p>
-この例では、<code>content</code> という名前の入力欄から値を受け取っています。
+この SQL は、tasks テーブルの <code>id</code> と <code>content</code> を取得します。
 </p>
-</div>
-
-<div class="section">
-<h2>HTMLフォームの例</h2>
-
-<p>
-ブラウザ側では、次のようなフォームを使います。
-</p>
-
-<pre><code class="language-html">
-<form method="post" action="/tasks">
-  <input type="text" name="content">
-  <button type="submit">送信</button>
-</form>
-</code></pre>
 
 <ul>
-<li><code>method="post"</code> → データを送る</li>
-<li><code>name="content"</code> → Go側で受け取る名前</li>
-<li><code>action="/tasks"</code> → 送信先URL</li>
+<li><code>db.Query</code> → 複数行のデータを取得する</li>
+<li><code>rows</code> → 取得結果を順番に読むためのもの</li>
 </ul>
 </div>
 
 <div class="section">
-<h2>よく使う考え方</h2>
+<h2>取得したデータを読む</h2>
 
 <p>
-フォーム送信では、HTMLとGoの名前をそろえることが大切です。
+取得した <code>rows</code> は、そのままでは画面に出せません。
+</p>
+
+<p>
+1行ずつ読み取って、表示用のデータに整えます。
+</p>
+
+<pre><code class="language-go">
+for rows.Next() {
+	var id int
+	var content string
+	rows.Scan(&id, &content)
+}
+</code></pre>
+
+<p>
+この流れで、データベースの中身を Go の変数に取り出せます。
+</p>
+
+<p>
+初心者のうちは、<code>rows.Next()</code> は「1件ずつ順番に見るためのループ」と覚えると分かりやすいです。
+</p>
+</div>
+
+<div class="section">
+<h2>画面に渡す</h2>
+
+<p>
+取り出したデータは、テンプレートに渡して一覧画面として表示します。
+</p>
+
+<pre><code class="language-go">
+data := struct {
+	Tasks []Task
+}{
+	Tasks: tasks,
+}
+</code></pre>
+
+<p>
+テンプレート側では、配列として受け取り、繰り返し表示できます。
 </p>
 
 <div class="notice">
-HTMLの <code>name</code> 属性と、Goの <code>FormValue</code> の名前を一致させます。
+Read は「DBから取る」だけで終わらず、「画面に渡す」ことで初めてユーザーに見える形になります。
+</div>
+</div>
+
+<div class="section">
+<h2>一覧表示のイメージ</h2>
+
+<pre><code class="language-text">
+tasksテーブル
+↓
+SELECTで取得
+↓
+Goで整形
+↓
+template.Executeで表示
+↓
+ブラウザで一覧を見る
+</code></pre>
+
+<p>
+Read が完成すると、Create で保存したデータを確認できるようになります。
+</p>
+</div>
+
+<div class="section">
+<h2>よくある確認ポイント</h2>
+
+<ul>
+<li>SQL のカラム名は正しいか</li>
+<li><code>rows.Next()</code> を使っているか</li>
+<li><code>rows.Scan()</code> の順番は合っているか</li>
+<li>テンプレートへデータを渡せているか</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>main.go で確認するポイント</h2>
+
+<p>
+main.go では、次の流れを探してみましょう。
+</p>
+
+<ul>
+<li><code>db.Query</code> でデータを取得している部分</li>
+<li><code>rows.Next()</code> で1件ずつ読んでいる部分</li>
+<li><code>rows.Scan()</code> で変数に入れている部分</li>
+<li><code>template.Execute</code> で画面に渡している部分</li>
+</ul>
+
+<div class="notice">
+Read の処理は、「DBから読む」「Goで整える」「画面へ渡す」の3段階で見ると理解しやすくなります。
 </div>
 </div>
 
@@ -120,14 +186,19 @@ HTMLの <code>name</code> 属性と、Goの <code>FormValue</code> の名前を�
 </p>
 
 <pre><code class="language-go">
-r.ParseForm()
-content := r.FormValue("content")
+rows, err := db.Query("SELECT id, content FROM tasks")
 </code></pre>
 </div>
 
 <div class="exercise">
 <p>
-HTMLフォームの <code>name="content"</code> は、Go側のどの処理と対応しているでしょうか？
+なぜ <code>rows.Next()</code> が必要なのでしょうか？
+</p>
+</div>
+
+<div class="exercise">
+<p>
+取得したデータをブラウザに見せるには、どの処理につなげる必要があるでしょうか？
 </p>
 </div>
 </div>
@@ -136,11 +207,11 @@ HTMLフォームの <code>name="content"</code> は、Go側のどの処理と対
 <h2>次のLessonへ</h2>
 
 <p>
-Lesson7では、画面から送信されたデータを受け取る方法を学びました。
+Lesson7では、データベースからデータを取り出して一覧表示する流れを学びました。
 </p>
 
 <p>
-次のLesson8では、GitHubへの登録方法と <code>.gitignore</code> をまとめて整理します。
+次の Lesson8 では、さらに画面入力の扱いを広げていきます。
 </p>
 </div>
 

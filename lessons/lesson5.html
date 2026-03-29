@@ -23,29 +23,72 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <div class="main">
 
 <div class="section">
+<h2>このレッスンのゴール</h2>
+
+<p>
+Lesson4 では、データベースへ接続する準備をしました。
+</p>
+
+<p>
+Lesson5 では、Webアプリの基本操作である
+<strong>CRUD</strong>
+を整理します。
+</p>
+
+<p>
+ここではまず全体像をつかみ、次のレッスン以降で Create と Read を実装し、
+そのあとで Update と Delete へ広げていく流れを作ります。
+</p>
+</div>
+
+<div class="section">
 <h2>CRUDとは</h2>
 
 <p>
-CRUDは、データベースの基本操作を表す言葉です。
+CRUD は、データベースの基本操作を表す言葉です。
 </p>
 
 <ul>
-<li>Create（作成）</li>
-<li>Read（取得）</li>
-<li>Update（更新）</li>
-<li>Delete（削除）</li>
+<li><strong>Create</strong>（作成）</li>
+<li><strong>Read</strong>（取得）</li>
+<li><strong>Update</strong>（更新）</li>
+<li><strong>Delete</strong>（削除）</li>
 </ul>
 
 <div class="notice">
-この4つを理解すると、Webアプリの基本的なデータ操作が分かるようになります。
+この4つを理解すると、Webアプリのデータ操作がひと通り見えるようになります。
 </div>
+</div>
+
+<div class="section">
+<h2>まずは全体の役割を分けて考える</h2>
+
+<p>
+CRUD は、ただの暗記ではなく「データをどう扱うか」の分類です。
+</p>
+
+<p>
+それぞれの役割は次のように考えられます。
+</p>
+
+<ul>
+<li><strong>Create</strong>：新しいデータを増やす</li>
+<li><strong>Read</strong>：保存済みのデータを見る</li>
+<li><strong>Update</strong>：保存済みのデータを直す</li>
+<li><strong>Delete</strong>：保存済みのデータを消す</li>
+</ul>
+
+<p>
+このレッスンでは、まず Create と Read の考え方をしっかり押さえます。
+Update と Delete は、このあと追加していく章で扱います。
+</p>
 </div>
 
 <div class="section">
 <h2>Create（作成）</h2>
 
 <p>
-Createは、データベースに新しいデータを追加する処理です。
+Create は、データベースに新しいデータを追加する処理です。
 </p>
 
 <pre><code class="language-go">
@@ -53,7 +96,7 @@ db.Exec("INSERT INTO tasks (content) VALUES (?)", name)
 </code></pre>
 
 <p>
-このSQLは、tasksテーブルに新しい行を追加します。
+このSQLは、<code>tasks</code> テーブルに新しい行を追加します。
 </p>
 
 <ul>
@@ -72,7 +115,7 @@ db.Exec("INSERT INTO tasks (content) VALUES (?)", name)
 <h2>Read（取得）</h2>
 
 <p>
-Readは、データベースから保存済みのデータを取り出す処理です。
+Read は、データベースから保存済みのデータを取り出す処理です。
 </p>
 
 <pre><code class="language-go">
@@ -80,28 +123,36 @@ rows, err := db.Query("SELECT id, content FROM tasks")
 </code></pre>
 
 <p>
-このSQLは、tasksテーブルから <code>id</code> と <code>content</code> を取得します。
+このSQLは、<code>tasks</code> テーブルから <code>id</code> と <code>content</code> を取得します。
 </p>
 
 <ul>
 <li><code>SELECT</code> → データを取得する</li>
 <li><code>rows</code> → 複数行の結果を受け取る</li>
 </ul>
+
+<p>
+Create は「増やす」、Read は「見る」と考えると分かりやすいです。
+</p>
 </div>
 
 <div class="section">
-<h2>CreateとReadの違い</h2>
+<h2>Update と Delete はどうつながるか</h2>
 
-<div class="exercise">
 <p>
-Createは「データを増やす」、Readは「データを見る」処理です。
+このレッスンではまだ実装しませんが、Update と Delete も同じ考え方で動きます。
 </p>
 
 <pre><code class="language-text">
 Create → INSERT
-Read    → SELECT
+Read   → SELECT
+Update → UPDATE
+Delete → DELETE
 </code></pre>
-</div>
+
+<p>
+あとのレッスンで、この4つをひとつずつ画面操作と結びつけていきます。
+</p>
 </div>
 
 <div class="section">
@@ -112,23 +163,41 @@ Read    → SELECT
  ↓
 Goサーバーで受け取る
  ↓
-CREATEならINSERT
+Create なら INSERT
  ↓
-READならSELECT
+Read    なら SELECT
  ↓
 DBの結果を画面に返す
 </code></pre>
 
 <p>
-この流れが分かると、CRUDアプリ全体の動きが見えてきます。
+この流れが分かると、CRUD アプリ全体の動きが見えてきます。
 </p>
+</div>
+
+<div class="section">
+<h2>main.go で確認するポイント</h2>
+
+<p>
+main.go では、次の2つを探してみましょう。
+</p>
+
+<ul>
+<li><code>db.Exec</code> でデータを追加している部分</li>
+<li><code>db.Query</code> でデータを取得している部分</li>
+</ul>
+
+<div class="notice">
+ここで Create と Read の違いを見分けられるようになると、
+次のレッスンで実装を読むときに迷いにくくなります。
+</div>
 </div>
 
 <div class="section">
 <h2>演習</h2>
 
 <div class="exercise">
-<p>UpdateとDeleteのSQLを書いてみましょう。</p>
+<p>Update と Delete の SQL を書いてみましょう。</p>
 
 <pre><code class="language-go">
 UPDATE tasks SET content = ? WHERE id = ?
@@ -144,17 +213,24 @@ db.Exec("INSERT INTO tasks (content) VALUES (?)", name)
 rows, err := db.Query("SELECT id, content FROM tasks")
 </code></pre>
 </div>
+
+<div class="exercise">
+<p>
+Create、Read、Update、Delete をそれぞれ一言で言いかえるとどうなりますか？
+</p>
+</div>
 </div>
 
 <div class="section">
 <h2>次のLessonへ</h2>
 
 <p>
-Lesson5では、CRUDの基本操作を確認しました。
+Lesson5では、CRUD の全体像を確認しました。
 </p>
 
 <p>
-次のLesson6では、CreateとReadを実際の画面やハンドラとつなげていきます。
+次のレッスンでは、まず Create を実装して、
+そのあと Read、Update、Delete へ広げていきます。
 </p>
 </div>
 

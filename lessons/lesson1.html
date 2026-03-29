@@ -29,6 +29,7 @@ width:260px;
 background:#111827;
 color:white;
 padding:20px;
+overflow:auto;
 }
 
 .sidebar h2{
@@ -71,6 +72,7 @@ background:#fff4db;
 padding:16px;
 border-radius:8px;
 margin-top:16px;
+line-height:1.7;
 }
 
 .exercise{
@@ -78,6 +80,7 @@ background:#eef6ff;
 padding:16px;
 border-radius:8px;
 margin-top:16px;
+line-height:1.7;
 }
 
 pre{
@@ -111,59 +114,210 @@ color:#e5e7eb;
 <div class="main">
 
 <div class="section">
-<h2>このアプリの全体像</h2>
+<h2>このレッスンのゴール</h2>
+
+<p>
+この研修では、GoでWebアプリケーションを作ります。
+そのために、このレッスンではまず
+<strong>Goをインストールするところから</strong>
+始めます。
+</p>
+
+<p>
+HTML・CSS・JavaScript を触ったことがある方を前提に、
+ここでは「Goは初めて」という状態から、
+<strong>最初のGoプロジェクトを作って、実行できるところ</strong>
+まで進みます。
+</p>
+
+<p>
+このレッスンが終わるころには、次の流れが分かるようになります。
+</p>
+
+<ul>
+<li>Go をインストールする</li>
+<li>Go のバージョンを確認する</li>
+<li>最初のプロジェクトフォルダを作る</li>
+<li>Go module を初期化する</li>
+<li>main.go を作って実行する</li>
+<li>この教材全体の流れを理解する</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>1. Go をインストールする</h2>
+
+<p>
+まずは Go をパソコンに入れます。
+Go の公式サイトからインストールできます。
+</p>
+
+<p>
+公式サイト:
+<a href="https://go.dev/dl/" target="_blank" rel="noopener noreferrer">
+https://go.dev/dl/
+</a>
+</p>
+
+<p>
+インストールが終わったら、ターミナル（Windowsなら PowerShell でも可）で
+次のコマンドを実行してみましょう。
+</p>
+
+<pre><code class="language-bash">
+go version
+</code></pre>
+
+<p>
+以下のように表示されれば、Go は正しく入っています。
+バージョン番号は環境によって異なります。
+</p>
+
+<pre><code class="language-bash">
+go version go1.xx.x darwin/arm64
+</code></pre>
+
+<div class="notice">
+Go が見つからない場合は、インストール後にターミナルを開き直してみてください。
+それでも動かない場合は、PATH の設定を確認します。
+</div>
+</div>
+
+<div class="section">
+<h2>2. 最初の Go プロジェクトを作る</h2>
+
+<p>
+Go を入れたら、最初のプロジェクトフォルダを作ります。
+ここでは例として <code>go-todo-crud</code> という名前にします。
+</p>
+
+<pre><code class="language-bash">
+mkdir go-todo-crud
+cd go-todo-crud
+</code></pre>
+
+<p>
+次に、Go module を初期化します。
+これが Go のプロジェクトの「土台」になります。
+</p>
+
+<pre><code class="language-bash">
+go mod init example.com/go-todo-crud
+</code></pre>
+
+<p>
+このコマンドを実行すると、<code>go.mod</code> というファイルが作られます。
+Go はこのファイルを見て、「このプロジェクトはどの module なのか」を判断します。
+</p>
+
+<div class="notice">
+Go では、まず <code>go mod init</code> をしてから開発を始めるのが基本です。
+</div>
+</div>
+
+<div class="section">
+<h2>3. main.go を作ってみる</h2>
+
+<p>
+次に、<code>main.go</code> というファイルを作成します。
+Go のプログラムは、まず <code>main</code> パッケージから始まります。
+</p>
+
+<pre><code class="language-go">
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, Go!")
+}
+</code></pre>
+
+<p>
+このファイルを保存したら、以下のコマンドで実行できます。
+</p>
+
+<pre><code class="language-bash">
+go run .
+</code></pre>
+
+<p>
+実行できると、ターミナルに次のような文字が表示されます。
+</p>
+
+<pre><code class="language-bash">
+Hello, Go!
+</code></pre>
+
+<p>
+ここまでできれば、Go の開発を始める準備は完了です。
+</p>
+</div>
+
+<div class="section">
+<h2>4. この教材で作るアプリの全体像</h2>
 
 <p>
 この研修では「CRUDアプリ」を作成します。
-CRUDとは以下の操作のことです。
+CRUDとは以下の4つの操作のことです。
 </p>
 
 <ul>
-<li>Create（作成）</li>
-<li>Read（取得）</li>
-<li>Update（更新）</li>
-<li>Delete（削除）</li>
+<li><strong>Create</strong>（作成）</li>
+<li><strong>Read</strong>（取得）</li>
+<li><strong>Update</strong>（更新）</li>
+<li><strong>Delete</strong>（削除）</li>
 </ul>
 
 <p>
-最終的に、データベースに保存された情報をブラウザで操作できるアプリを作ります。
+最終的には、データベースに保存された情報を
+ブラウザから操作できるアプリを作ります。
 </p>
-</div>
-
-<div class="section">
-<h2>アプリの構成を理解する</h2>
-
-<p>このアプリは以下の3つで構成されています。</p>
-
-<ul>
-<li><b>Go Web Server</b>：ブラウザからのリクエストを処理する</li>
-<li><b>MySQL Database</b>：データを保存する</li>
-<li><b>.env ファイル</b>：接続情報を管理する</li>
-</ul>
 
 <div class="notice">
-Webアプリは「画面」「サーバー」「データベース」の3層構造で動きます
+この研修では、1つ1つの処理を小さく分けて学びながら、
+最終的に CRUD アプリとしてつなげていきます。
 </div>
 </div>
 
 <div class="section">
-<h2>.env ファイルとは？</h2>
+<h2>5. アプリの構成を理解する</h2>
 
 <p>
-.envファイルは「設定情報」をまとめたファイルです。
+このアプリは、主に以下の3つで構成されています。
+</p>
+
+<ul>
+<li><strong>Go Web Server</strong>：ブラウザからのリクエストを受け取り、処理する</li>
+<li><strong>MySQL Database</strong>：データを保存する</li>
+<li><strong>.env ファイル</strong>：接続情報や設定をまとめる</li>
+</ul>
+
+<div class="notice">
+Webアプリは「画面」「サーバー」「データベース」の3層構造で動きます。
+最初は難しく見えても、役割ごとに分けて考えると理解しやすくなります。
+</div>
+</div>
+
+<div class="section">
+<h2>6. .env ファイルとは？</h2>
+
+<p>
+<code>.env</code> ファイルは、設定情報をまとめて管理するためのファイルです。
 </p>
 
 <p>
-例えばデータベースの接続情報をコードに直接書くと、
-セキュリティ的に危険です。
+たとえばデータベースの接続情報をコードに直接書くと、
+セキュリティの面でも管理の面でもあまりよくありません。
 </p>
 
 <div class="notice">
-パスワードをコードに書くのはNGです
+パスワードをコードに直接書くのは避けましょう。
 </div>
 
 <p>
-そのため、環境変数として外部に分離します。
+そのため、環境変数として外に分けて管理します。
+以下は一例です。
 </p>
 
 <pre><code class="language-bash">
@@ -174,18 +328,21 @@ SQL_DBNAME=mermaid
 PORT=8080
 </code></pre>
 
+<p>
+このようにしておくと、コード本体を変えずに設定だけを差し替えやすくなります。
+</p>
 </div>
 
 <div class="section">
-<h2>Goサーバーとは？</h2>
+<h2>7. Goサーバーとは？</h2>
 
 <p>
-Goサーバーはブラウザからのリクエストを受け取り、
-処理結果を返す役割を持ちます。
+Goサーバーは、ブラウザから送られてきたリクエストを受け取り、
+必要な処理をして、結果を返す役割を持ちます。
 </p>
 
 <p>
-例えば以下のコードは「8080番ポートで待ち受ける」処理です。
+たとえば以下のコードは、「8080番ポートで待ち受ける」処理です。
 </p>
 
 <pre><code class="language-go">
@@ -193,10 +350,28 @@ http.ListenAndServe(":8080", nil)
 </code></pre>
 
 <ul>
-<li>http：Web通信の仕組み</li>
-<li>8080：ポート番号（アクセス入口）</li>
+<li><code>http</code>：Web通信を扱う仕組み</li>
+<li><code>8080</code>：ポート番号（アクセス入口）</li>
 </ul>
 
+<p>
+このあと学ぶハンドラやテンプレートは、
+このサーバーの上で動く部品だと考えると理解しやすくなります。
+</p>
+</div>
+
+<div class="section">
+<h2>8. このレッスンで覚えること</h2>
+
+<p>ここまでで、まず次のことを押さえられれば十分です。</p>
+
+<ul>
+<li>Go をインストールできる</li>
+<li><code>go version</code> で確認できる</li>
+<li><code>go mod init</code> でプロジェクトを始められる</li>
+<li><code>main.go</code> を作って実行できる</li>
+<li>この教材が CRUD アプリの作成を目指していると分かる</li>
+</ul>
 </div>
 
 <div class="section">
@@ -207,12 +382,24 @@ http.ListenAndServe(":8080", nil)
 <p>以下の質問に答えてください。</p>
 
 <ul>
-<li>.envファイルはなぜ必要ですか？</li>
-<li>8080ポートとは何ですか？</li>
+<li>Go をインストールしたあと、最初に確認するコマンドは何ですか？</li>
+<li><code>go mod init</code> は何のために使いますか？</li>
+<li><code>main.go</code> を <code>go run .</code> で実行すると何が起こりますか？</li>
+<li>.env ファイルはなぜ必要ですか？</li>
 <li>Goサーバーの役割は何ですか？</li>
 </ul>
 
 </div>
+</div>
+
+<div class="section">
+<h2>次のレッスンへ</h2>
+
+<p>
+次は、Go を使って実際に Web サーバーを立ち上げます。
+ここで作ったプロジェクトの上に、
+ブラウザで表示できる最初の画面を追加していきます。
+</p>
 </div>
 
 </div>
@@ -220,13 +407,13 @@ http.ListenAndServe(":8080", nil)
 
 <script>
     hljs.highlightAll();
-    
+
     fetch("../sidebar.html")
     .then(res => res.text())
     .then(data => {
-    document.getElementById("sidebar").innerHTML = data
+        document.getElementById("sidebar").innerHTML = data
     })
-    </script>
+</script>
 
 </body>
 </html>

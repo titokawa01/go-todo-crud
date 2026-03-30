@@ -3,6 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>用語集</title>
 
 <link rel="stylesheet"
@@ -13,162 +14,16 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-d
 <link rel="stylesheet" href="../css/style.css">
 
 <style>
-body{
-margin:0;
-font-family: system-ui;
-background:#f6f7f9;
-}
-
-.layout{
-display:flex;
-height:100vh;
-}
-
-.sidebar{
-width:260px;
-background:#111827;
-color:white;
-padding:20px;
-overflow:auto;
-}
-
-.sidebar h2{
-margin-top:0;
-}
-
-.nav-item{
-padding:10px;
-border-radius:6px;
-cursor:pointer;
-margin-bottom:6px;
-}
-
-.nav-item a{
-color:white;
-text-decoration:none;
-display:block;
-}
-
-.nav-item:hover{
-background:#1f2937;
-}
-
-.main{
-flex:1;
-overflow:auto;
-padding:40px;
-}
-
-.section{
-background:white;
-border-radius:12px;
-padding:24px;
-margin-bottom:24px;
-box-shadow:0 2px 6px rgba(0,0,0,0.05);
-}
-
-.notice{
-background:#fff4db;
-padding:16px;
-border-radius:8px;
-margin-top:16px;
-line-height:1.7;
-}
-
-.exercise{
-background:#eef6ff;
-padding:16px;
-border-radius:8px;
-margin-top:16px;
-line-height:1.7;
-}
-
-pre{
-background:#0f172a;
-padding:16px;
-border-radius:8px;
-overflow:auto;
-}
-
-code{
-font-family:monospace;
-font-size:14px;
-color:#e5e7eb;
-}
-
-.term-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
-gap:16px;
-margin-top:16px;
-}
-
-.term-card{
-border:1px solid #e5e7eb;
-border-radius:12px;
-padding:16px;
-background:#fff;
-}
-
-.term-card h3{
-margin:0 0 8px 0;
-font-size:18px;
-}
-
-.term-tag{
-display:inline-block;
-font-size:12px;
-padding:4px 8px;
-border-radius:999px;
-background:#e5e7eb;
-margin-bottom:10px;
-}
-
-.index-list{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-top:12px;
-}
-
-.index-list a{
-display:inline-block;
-padding:8px 12px;
-border-radius:999px;
-background:#eef2ff;
-text-decoration:none;
-color:#1f2937;
-font-size:14px;
-}
-
-.index-list a:hover{
-background:#dbe4ff;
-}
-
-.term-example{
-  margin-top:10px;
-  padding:12px;
-  border-left:4px solid #cbd5e1;
-  background:#f8fafc;
-  border-radius:8px;
-  color:#111827;
-}
-
-.term-example code{
-  color:#111827;
-  background:#e2e8f0;
-  padding:0 0.25em;
-  border-radius:4px;
-}
-
-.term-example pre{
-  margin:8px 0 0;
-  background:#e2e8f0;
-  color:#111827;
-  border-radius:8px;
-  padding:12px;
-  overflow:auto;
-}
+.term-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px}
+.term-card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;background:#fff}
+.term-card h3{margin:0 0 8px 0;font-size:18px}
+.term-tag{display:inline-block;font-size:12px;padding:4px 8px;border-radius:999px;background:#e5e7eb;margin-bottom:10px}
+.index-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.index-list a{display:inline-block;padding:8px 12px;border-radius:999px;background:#eef2ff;text-decoration:none;color:#1f2937;font-size:14px}
+.index-list a:hover{background:#dbe4ff}
+.term-example{margin-top:10px;padding:12px;border-left:4px solid #cbd5e1;background:#f8fafc;border-radius:8px;color:#111827}
+.term-example code{color:#111827;background:#e2e8f0;padding:0 0.25em;border-radius:4px}
+.term-example pre{margin:8px 0 0;background:#e2e8f0;color:#111827;border-radius:8px;padding:12px;overflow:auto}
 </style>
 
 </head>
@@ -200,6 +55,7 @@ background:#dbe4ff;
 </div>
 
 <div class="index-list">
+<a href="#exercise">演習</a>
 <a href="#go">Goの基本</a>
 <a href="#web">Webの基本</a>
 <a href="#template">テンプレート</a>
@@ -209,6 +65,83 @@ background:#dbe4ff;
 <a href="#delete">Delete</a>
 <a href="#git">Git / GitHub</a>
 </div>
+</div>
+
+<div class="section" id="exercise">
+<h2>演習</h2>
+
+<p>
+ここでは、実際にタイピングして答える練習をします。
+最初は短い答えから始めて、少しずつ長いコードに慣れていきましょう。
+</p>
+
+<div class="quiz-card" data-answer="main.go" data-mode="exact">
+<div class="quiz-meta">初級</div>
+<div class="quiz-question">Goプログラムの中心となるファイル名を入力してください。</div>
+<div class="quiz-input-row">
+<input type="text" placeholder="例: main.go">
+<button type="button" class="quiz-check">判定</button>
+</div>
+<div class="quiz-result"></div>
+<div class="quiz-hint">ヒント: この教材では、最初に作るファイルです。</div>
+</div>
+
+<div class="quiz-card" data-answer="template.Execute(w, data)" data-mode="normalize">
+<div class="quiz-meta">中級</div>
+<div class="quiz-question">テンプレートにデータを渡して画面に反映する処理を書いてください。</div>
+<div class="quiz-input-row">
+<input type="text" placeholder="例: tmpl.Execute(w, data)">
+<button type="button" class="quiz-check">判定</button>
+</div>
+<div class="quiz-result"></div>
+<div class="quiz-answer">
+正解例: <code>tmpl.Execute(w, data)</code>
+</div>
+<div class="quiz-hint">ヒント: テンプレートを「動かす」処理です。</div>
+</div>
+
+<div class="quiz-card" data-answer="INSERT INTO tasks (content) VALUES (?)" data-mode="normalize">
+<div class="quiz-meta">上級</div>
+<div class="quiz-question">tasks テーブルに content を追加する SQL を入力してください。</div>
+<div class="quiz-input-row">
+<input type="text" placeholder="例: INSERT INTO tasks (content) VALUES (?)">
+<button type="button" class="quiz-check">判定</button>
+</div>
+<div class="quiz-result"></div>
+<div class="quiz-answer">
+正解例: <code>INSERT INTO tasks (content) VALUES (?)</code>
+</div>
+<div class="quiz-hint">ヒント: Create で使う SQL です。</div>
+</div>
+
+<div class="quiz-card" data-answer="r.ParseForm()" data-mode="normalize">
+<div class="quiz-meta">初級</div>
+<div class="quiz-question">フォームの値を Go で読めるようにする処理を入力してください。</div>
+<div class="quiz-input-row">
+<input type="text" placeholder="例: r.ParseForm()">
+<button type="button" class="quiz-check">判定</button>
+</div>
+<div class="quiz-result"></div>
+<div class="quiz-answer">
+正解例: <code>r.ParseForm()</code>
+</div>
+<div class="quiz-hint">ヒント: FormValue の前に呼ぶことが多いです。</div>
+</div>
+
+<div class="quiz-card" data-answer="DELETE FROM tasks WHERE id = ?" data-mode="normalize">
+<div class="quiz-meta">中級</div>
+<div class="quiz-question">ID を条件に tasks テーブルのデータを削除する SQL を入力してください。</div>
+<div class="quiz-input-row">
+<input type="text" placeholder="例: DELETE FROM tasks WHERE id = ?">
+<button type="button" class="quiz-check">判定</button>
+</div>
+<div class="quiz-result"></div>
+<div class="quiz-answer">
+正解例: <code>DELETE FROM tasks WHERE id = ?</code>
+</div>
+<div class="quiz-hint">ヒント: WHERE で対象を絞ります。</div>
+</div>
+
 </div>
 
 <div class="section" id="go">
@@ -801,9 +734,9 @@ handler          → URLごとの処理担当
 template         → HTMLのひな形
 FormValue        → フォームの値を取り出す
 ParseForm        → フォームを読み込む準備
-Exec             → テンプレートやSQLを実行する
+Execute          → テンプレートを画面に出力する
 Query            → 複数行のデータを取得する
-Exec / Query     → SQLを実行するために使う
+Exec             → SQLを実行する
 multipart/form-data → ファイル送信の形式
 Redirect         → 処理後に別ページへ移動する
 </code></pre>
@@ -827,14 +760,60 @@ Redirect         → 処理後に別ページへ移動する
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-hljs.highlightAll();
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, " ")
+    .replace(/\u3000/g, " ");
+}
 
-fetch("../sidebar.html")
-.then(res => res.text())
-.then(data => {
-document.getElementById("sidebar").innerHTML = data;
-});
+function checkQuiz(button) {
+  const card = button.closest(".quiz-card");
+  const input = card.querySelector("input");
+  const result = card.querySelector(".quiz-result");
+  const answer = card.dataset.answer || "";
+  const mode = card.dataset.mode || "exact";
+  const user = input.value;
+
+  let ok = false;
+
+  if (mode === "exact") {
+    ok = user.trim() === answer;
+  } else {
+    ok = normalizeText(user) === normalizeText(answer);
+  }
+
+  if (ok) {
+    result.textContent = "正解です！";
+    result.style.color = "#047857";
+  } else {
+    result.textContent = "もう一度見直してみましょう。";
+    result.style.color = "#b91c1c";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  hljs.highlightAll();
+
+  fetch("../sidebar.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("sidebar").innerHTML = data;
+    });
+
+  document.querySelectorAll(".quiz-check").forEach(button => {
+    button.addEventListener("click", () => checkQuiz(button));
+  });
+
+  document.querySelectorAll(".quiz-card input").forEach(input => {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        checkQuiz(input.closest(".quiz-card").querySelector(".quiz-check"));
+      }
+    });
+  });
 });
 </script>
 

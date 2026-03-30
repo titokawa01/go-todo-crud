@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>演習</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    .page-links{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+    .page-links a{display:inline-block;padding:10px 14px;border-radius:999px;background:#111827;color:#fff;text-decoration:none;font-size:14px}
+    .page-links a:hover{background:#1f2937}
+    .level-block{margin-top:22px}
+    .level-title{font-size:18px;font-weight:700;margin:0 0 10px 0}
+    .level-note{margin:0 0 14px 0;color:#4b5563;line-height:1.7}
+    .quiz-card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;background:#fff;margin-top:16px}
+    .quiz-meta{font-size:12px;font-weight:700;letter-spacing:0.04em;color:#6b7280;text-transform:uppercase;margin-bottom:10px}
+    .quiz-question{font-size:15px;line-height:1.7;margin-bottom:12px}
+    .quiz-input-row{display:flex;gap:10px;flex-wrap:wrap}
+    .quiz-input-row input{flex:1;min-width:220px;padding:12px 14px;border:1px solid #d1d5db;border-radius:10px;font-size:15px}
+    .quiz-input-row button{padding:12px 16px;border:none;border-radius:10px;background:#111827;color:#fff;font-weight:700;cursor:pointer}
+    .quiz-input-row button:hover{background:#1f2937}
+    .quiz-result{margin-top:10px;font-weight:700}
+    .quiz-answer{margin-top:10px;padding:12px;background:#f9fafb;border-radius:10px;color:#374151}
+    .quiz-answer code{color:#111827;background:#e5e7eb;padding:0 0.25em;border-radius:4px}
+    .quiz-hint{margin-top:8px;font-size:14px;color:#6b7280}
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+
+    <div class="main">
+      <div class="section">
+        <h2>演習</h2>
+        <p>
+          ここでは、実際にタイピングして答える練習をします。
+          最初は短い答えから始めて、少しずつ長いコードに慣れていきましょう。
+        </p>
+
+        <div class="notice">
+          まずは入力してみて、正解と見比べながら覚えていくのがおすすめです。
+        </div>
+
+        <div class="page-links">
+          <a href="glossary.html">用語集へ</a>
+        </div>
+      </div>
+
+      <div class="section level-block" id="basic1">
+        <h2 class="level-title">初級1</h2>
+        <p class="level-note">まずは、ファイル名や基本的な下準備のコードから慣れていきましょう。</p>
+
+        <div class="quiz-card" data-answer="main.go" data-mode="exact">
+          <div class="quiz-meta">初級1</div>
+          <div class="quiz-question">Goプログラムの中心となるファイル名を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: main.go">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-hint">ヒント: この教材では、最初に作るファイルです。</div>
+        </div>
+
+        <div class="quiz-card" data-answer="r.ParseForm()" data-mode="normalize">
+          <div class="quiz-meta">初級1</div>
+          <div class="quiz-question">フォームの値を Go で読めるようにする処理を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: r.ParseForm()">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>r.ParseForm()</code></div>
+          <div class="quiz-hint">ヒント: FormValue の前に呼ぶことが多いです。</div>
+        </div>
+      </div>
+
+      <div class="section level-block" id="basic2">
+        <h2 class="level-title">初級2</h2>
+        <p class="level-note">URLと処理のつながり、そしてリクエストの見方を確認します。</p>
+
+        <div class="quiz-card" data-answer='http.HandleFunc("/", handler)' data-mode="normalize">
+          <div class="quiz-meta">初級2</div>
+          <div class="quiz-question">URL と handler を結びつけるコードを入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder='例: http.HandleFunc("/", handler)'>
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>http.HandleFunc("/", handler)</code></div>
+          <div class="quiz-hint">ヒント: どのURLに、どの処理を呼ぶかを登録します。</div>
+        </div>
+
+        <div class="quiz-card" data-answer="r.Method" data-mode="normalize">
+          <div class="quiz-meta">初級2</div>
+          <div class="quiz-question">リクエストの HTTP メソッドを確認するときに使う値を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: r.Method">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>r.Method</code></div>
+          <div class="quiz-hint">ヒント: GET か POST かを見分けるときに使います。</div>
+        </div>
+      </div>
+
+      <div class="section level-block" id="middle">
+        <h2 class="level-title">中級</h2>
+        <p class="level-note">テンプレートや SQL の基本を、少し長めのコードで確認します。</p>
+
+        <div class="quiz-card" data-answer="tmpl.Execute(w, data)" data-mode="normalize">
+          <div class="quiz-meta">中級</div>
+          <div class="quiz-question">テンプレートにデータを渡して画面に反映する処理を書いてください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: tmpl.Execute(w, data)">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>tmpl.Execute(w, data)</code></div>
+          <div class="quiz-hint">ヒント: テンプレートを「動かす」処理です。</div>
+        </div>
+
+        <div class="quiz-card" data-answer="DELETE FROM tasks WHERE id = ?" data-mode="normalize">
+          <div class="quiz-meta">中級</div>
+          <div class="quiz-question">ID を条件に tasks テーブルのデータを削除する SQL を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: DELETE FROM tasks WHERE id = ?">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>DELETE FROM tasks WHERE id = ?</code></div>
+          <div class="quiz-hint">ヒント: WHERE で対象を絞ります。</div>
+        </div>
+      </div>
+
+      <div class="section level-block" id="advanced">
+        <h2 class="level-title">上級</h2>
+        <p class="level-note">最後は、Create で使う SQL を自分で書けるか確認します。</p>
+
+        <div class="quiz-card" data-answer="INSERT INTO tasks (content) VALUES (?)" data-mode="normalize">
+          <div class="quiz-meta">上級</div>
+          <div class="quiz-question">tasks テーブルに content を追加する SQL を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: INSERT INTO tasks (content) VALUES (?)">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>INSERT INTO tasks (content) VALUES (?)</code></div>
+          <div class="quiz-hint">ヒント: Create で使う SQL です。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function normalizeText(text) {
+      return text
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/\u3000/g, " ");
+    }
+
+    function checkQuiz(button) {
+      const card = button.closest(".quiz-card");
+      const input = card.querySelector("input");
+      const result = card.querySelector(".quiz-result");
+      const answer = card.dataset.answer || "";
+      const mode = card.dataset.mode || "exact";
+      const user = input.value;
+
+      let ok = false;
+      if (mode === "exact") {
+        ok = user.trim() === answer;
+      } else {
+        ok = normalizeText(user) === normalizeText(answer);
+      }
+
+      if (ok) {
+        result.textContent = "正解です！";
+        result.style.color = "#047857";
+      } else {
+        result.textContent = "もう一度見直してみましょう。";
+        result.style.color = "#b91c1c";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      hljs.highlightAll();
+
+      fetch("../sidebar.html")
+        .then(res => res.text())
+        .then(data => {
+          document.getElementById("sidebar").innerHTML = data;
+        });
+
+      document.querySelectorAll(".quiz-check").forEach(button => {
+        button.addEventListener("click", () => checkQuiz(button));
+      });
+
+      document.querySelectorAll(".quiz-card input").forEach(input => {
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            checkQuiz(input.closest(".quiz-card").querySelector(".quiz-check"));
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

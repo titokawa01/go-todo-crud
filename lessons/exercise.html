@@ -27,6 +27,7 @@
     .quiz-answer{margin-top:10px;padding:12px;background:#f9fafb;border-radius:10px;color:#374151}
     .quiz-answer code{color:#111827;background:#e5e7eb;padding:0 0.25em;border-radius:4px}
     .quiz-hint{margin-top:8px;font-size:14px;color:#6b7280}
+    .progress-note{margin-top:16px;padding:14px 16px;border-radius:12px;background:#eff6ff;color:#1e3a8a;line-height:1.7}
   </style>
 </head>
 
@@ -39,25 +40,33 @@
         <h2>演習</h2>
         <p>
           ここでは、実際にタイピングして答える練習をします。
-          最初は短い答えから始めて、少しずつ長いコードに慣れていきましょう。
+          「片手でできる Go 基礎学習」として、短いコードから少しずつ慣れていける構成にしています。
         </p>
 
         <div class="notice">
-          まずは入力してみて、正解と見比べながら覚えていくのがおすすめです。
+          まずは入力してみて、正解と見比べながら覚えていくのがおすすめです。Go の基礎が終わったら、HTML・CSS・JS の土台も同じ流れで増やせます。
         </div>
 
         <div class="page-links">
           <a href="glossary.html">用語集へ</a>
+          <a href="#basic1">初級1</a>
+          <a href="#basic2">初級2</a>
+          <a href="#middle">中級</a>
+          <a href="#advanced">上級</a>
+        </div>
+
+        <div class="progress-note">
+          進め方の目安: <strong>初級1</strong> で文法に慣れ、<strong>初級2</strong> で HTTP を触り、<strong>中級</strong> でテンプレートとフォーム、<strong>上級</strong> で DB 操作を固める流れです。
         </div>
       </div>
 
       <div class="section level-block" id="basic1">
         <h2 class="level-title">初級1</h2>
-        <p class="level-note">まずは、ファイル名や基本的な下準備のコードから慣れていきましょう。</p>
+        <p class="level-note">まずは、ファイル名や最小限の Go 文法から慣れていきましょう。</p>
 
         <div class="quiz-card" data-answer="main.go" data-mode="exact">
           <div class="quiz-meta">初級1</div>
-          <div class="quiz-question">Goプログラムの中心となるファイル名を入力してください。</div>
+          <div class="quiz-question">Go プログラムの中心となるファイル名を入力してください。</div>
           <div class="quiz-input-row">
             <input type="text" placeholder="例: main.go">
             <button type="button" class="quiz-check">判定</button>
@@ -66,22 +75,34 @@
           <div class="quiz-hint">ヒント: この教材では、最初に作るファイルです。</div>
         </div>
 
-        <div class="quiz-card" data-answer="r.ParseForm()" data-mode="normalize">
+        <div class="quiz-card" data-answer="package main" data-mode="normalize">
           <div class="quiz-meta">初級1</div>
-          <div class="quiz-question">フォームの値を Go で読めるようにする処理を入力してください。</div>
+          <div class="quiz-question">実行する Go ファイルの先頭に書くパッケージ宣言を入力してください。</div>
           <div class="quiz-input-row">
-            <input type="text" placeholder="例: r.ParseForm()">
+            <input type="text" placeholder="例: package main">
             <button type="button" class="quiz-check">判定</button>
           </div>
           <div class="quiz-result"></div>
-          <div class="quiz-answer">正解例: <code>r.ParseForm()</code></div>
-          <div class="quiz-hint">ヒント: FormValue の前に呼ぶことが多いです。</div>
+          <div class="quiz-answer">正解例: <code>package main</code></div>
+          <div class="quiz-hint">ヒント: 実行用のプログラムで使います。</div>
+        </div>
+
+        <div class="quiz-card" data-answer="func main()" data-mode="normalize">
+          <div class="quiz-meta">初級1</div>
+          <div class="quiz-question">Go の実行開始点となる関数を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: func main()">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>func main()</code></div>
+          <div class="quiz-hint">ヒント: ここから処理が始まります。</div>
         </div>
       </div>
 
       <div class="section level-block" id="basic2">
         <h2 class="level-title">初級2</h2>
-        <p class="level-note">URLと処理のつながり、そしてリクエストの見方を確認します。</p>
+        <p class="level-note">URL と処理のつながり、そしてリクエストの見方を確認します。</p>
 
         <div class="quiz-card" data-answer='http.HandleFunc("/", handler)' data-mode="normalize">
           <div class="quiz-meta">初級2</div>
@@ -92,7 +113,19 @@
           </div>
           <div class="quiz-result"></div>
           <div class="quiz-answer">正解例: <code>http.HandleFunc("/", handler)</code></div>
-          <div class="quiz-hint">ヒント: どのURLに、どの処理を呼ぶかを登録します。</div>
+          <div class="quiz-hint">ヒント: どの URL に、どの処理を呼ぶかを登録します。</div>
+        </div>
+
+        <div class="quiz-card" data-answer="func handler(w http.ResponseWriter, r *http.Request)" data-mode="normalize">
+          <div class="quiz-meta">初級2</div>
+          <div class="quiz-question">HTTP ハンドラの基本形を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: func handler(w http.ResponseWriter, r *http.Request)">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>func handler(w http.ResponseWriter, r *http.Request)</code></div>
+          <div class="quiz-hint">ヒント: 受け取るものと返すものを分けて考えます。</div>
         </div>
 
         <div class="quiz-card" data-answer="r.Method" data-mode="normalize">
@@ -106,11 +139,35 @@
           <div class="quiz-answer">正解例: <code>r.Method</code></div>
           <div class="quiz-hint">ヒント: GET か POST かを見分けるときに使います。</div>
         </div>
+
+        <div class="quiz-card" data-answer="http.MethodPost" data-mode="normalize">
+          <div class="quiz-meta">初級2</div>
+          <div class="quiz-question">POST メソッドを表す定数を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: http.MethodPost">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>http.MethodPost</code></div>
+          <div class="quiz-hint">ヒント: フォーム送信でよく使います。</div>
+        </div>
       </div>
 
       <div class="section level-block" id="middle">
         <h2 class="level-title">中級</h2>
-        <p class="level-note">テンプレートや SQL の基本を、少し長めのコードで確認します。</p>
+        <p class="level-note">テンプレートやフォーム受け取りを、少し長めのコードで確認します。</p>
+
+        <div class="quiz-card" data-answer='template.ParseFiles("templates/index.html")' data-mode="normalize">
+          <div class="quiz-meta">中級</div>
+          <div class="quiz-question">HTML テンプレートを読み込む処理を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder='例: template.ParseFiles("templates/index.html")'>
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>template.ParseFiles("templates/index.html")</code></div>
+          <div class="quiz-hint">ヒント: テンプレートを読み込む最初の一歩です。</div>
+        </div>
 
         <div class="quiz-card" data-answer="tmpl.Execute(w, data)" data-mode="normalize">
           <div class="quiz-meta">中級</div>
@@ -124,22 +181,58 @@
           <div class="quiz-hint">ヒント: テンプレートを「動かす」処理です。</div>
         </div>
 
-        <div class="quiz-card" data-answer="DELETE FROM tasks WHERE id = ?" data-mode="normalize">
+        <div class="quiz-card" data-answer="r.ParseForm()" data-mode="normalize">
           <div class="quiz-meta">中級</div>
-          <div class="quiz-question">ID を条件に tasks テーブルのデータを削除する SQL を入力してください。</div>
+          <div class="quiz-question">フォームの値を Go で読めるようにする処理を入力してください。</div>
           <div class="quiz-input-row">
-            <input type="text" placeholder="例: DELETE FROM tasks WHERE id = ?">
+            <input type="text" placeholder="例: r.ParseForm()">
             <button type="button" class="quiz-check">判定</button>
           </div>
           <div class="quiz-result"></div>
-          <div class="quiz-answer">正解例: <code>DELETE FROM tasks WHERE id = ?</code></div>
-          <div class="quiz-hint">ヒント: WHERE で対象を絞ります。</div>
+          <div class="quiz-answer">正解例: <code>r.ParseForm()</code></div>
+          <div class="quiz-hint">ヒント: FormValue の前に呼ぶことが多いです。</div>
+        </div>
+
+        <div class="quiz-card" data-answer='r.FormValue("content")' data-mode="normalize">
+          <div class="quiz-meta">中級</div>
+          <div class="quiz-question">content という名前のフォーム値を取り出すコードを入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder='例: r.FormValue("content")'>
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>r.FormValue("content")</code></div>
+          <div class="quiz-hint">ヒント: HTML の name 属性とつながっています。</div>
         </div>
       </div>
 
       <div class="section level-block" id="advanced">
         <h2 class="level-title">上級</h2>
-        <p class="level-note">最後は、Create で使う SQL を自分で書けるか確認します。</p>
+        <p class="level-note">最後は、SQL やファイル操作を自分で書けるか確認します。</p>
+
+        <div class="quiz-card" data-answer="sql.Open(\"mysql\", dsn)" data-mode="normalize">
+          <div class="quiz-meta">上級</div>
+          <div class="quiz-question">MySQL に接続するための準備をする処理を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder='例: sql.Open("mysql", dsn)'>
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>sql.Open("mysql", dsn)</code></div>
+          <div class="quiz-hint">ヒント: DB 接続の入口です。</div>
+        </div>
+
+        <div class="quiz-card" data-answer="db.Ping()" data-mode="normalize">
+          <div class="quiz-meta">上級</div>
+          <div class="quiz-question">DB に本当に接続できるか確認する処理を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: db.Ping()">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>db.Ping()</code></div>
+          <div class="quiz-hint">ヒント: 接続確認に使います。</div>
+        </div>
 
         <div class="quiz-card" data-answer="INSERT INTO tasks (content) VALUES (?)" data-mode="normalize">
           <div class="quiz-meta">上級</div>
@@ -151,6 +244,30 @@
           <div class="quiz-result"></div>
           <div class="quiz-answer">正解例: <code>INSERT INTO tasks (content) VALUES (?)</code></div>
           <div class="quiz-hint">ヒント: Create で使う SQL です。</div>
+        </div>
+
+        <div class="quiz-card" data-answer="DELETE FROM tasks WHERE id = ?" data-mode="normalize">
+          <div class="quiz-meta">上級</div>
+          <div class="quiz-question">ID を条件に tasks テーブルのデータを削除する SQL を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder="例: DELETE FROM tasks WHERE id = ?">
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>DELETE FROM tasks WHERE id = ?</code></div>
+          <div class="quiz-hint">ヒント: WHERE で対象を絞ります。</div>
+        </div>
+
+        <div class="quiz-card" data-answer='http.Redirect(w, r, "/", http.StatusSeeOther)' data-mode="normalize">
+          <div class="quiz-meta">上級</div>
+          <div class="quiz-question">処理後に一覧へ戻すためのリダイレクト処理を入力してください。</div>
+          <div class="quiz-input-row">
+            <input type="text" placeholder='例: http.Redirect(w, r, "/", http.StatusSeeOther)'>
+            <button type="button" class="quiz-check">判定</button>
+          </div>
+          <div class="quiz-result"></div>
+          <div class="quiz-answer">正解例: <code>http.Redirect(w, r, "/", http.StatusSeeOther)</code></div>
+          <div class="quiz-hint">ヒント: 保存後に画面遷移させるときに使います。</div>
         </div>
       </div>
     </div>
